@@ -1,10 +1,18 @@
 #ifndef _TERRAIN_HPP
 #define _TERRAIN_HPP
 
+#include <cstdio>
+#include "config.hpp"
 
 class Terrain
 {
-	char map[32][32];
+	private:
+		char map[map_size][map_size];
+		static Terrain *instance;
+		Terrain();
+	public:
+		~Terrain();
+		static Terrain *GetInstance();
 };
 
 #endif

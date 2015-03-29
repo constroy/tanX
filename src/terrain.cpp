@@ -1,21 +1,27 @@
 #include "terrain.hpp"
 
+Terrain *Terrain::instance;
 
-//For test demo
-void GenTerrain()
+Terrain::Terrain()
 {
-	for (int i=0;i<map_size;++i) terrain[i][0]=terrain[i][map_size-1]='/';
-	for (int j=0;j<map_size;++j) terrain[0][j]=terrain[map_size-1][j]='/';
-}
-void ReadTerrain()
-{
-	FILE *file=fopen("demo.map","r");
-	for (int i=0;i<map_size;++i)
+	FILE *file=fopen("../map/demo.map","r");
+	for (int i=0;i<map_size;i+=2)
 	{
-		for (int j=0;j<map_size;++j)
+		for (int j=0;j<map_size;j+=2)
 		{
-			terrain[i][j]=getchar();
+			map[i][j]=map[i+1][j]=map[i][j+1]=map[i+1][j+1]=getc(file);
 		}
-		getchar();
+		getc(file);
 	}
+	for (int i=0;i<map_size;++i) map[i][0]=map[i][map_size-1]='/';
+	for (int j=0;j<map_size;++j) map[0][j]=map[map_size-1][j]='/';
+}
+Terrain::~Terrain()
+{
+	instance=NULL;
+}
+Terrain *Terrain::GetInstance()
+{
+	if (instance==NULL) instance=new Terrain;
+	return instance;
 }

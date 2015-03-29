@@ -2,27 +2,12 @@
 
 SDL_Surface *bullet_clips[8];
 
-Bullet::Bullet(int model,short x,short y,int v,int d)
+Bullet::Bullet(int model,short x,short y,int d,int p)
 {
 	image=bullet_clips[model];
 	rect=(SDL_Rect){x,y,4,4};
-	vel=v;
+	vel=16;
 	dir=d;
+	pow=p;
 	dead=false;
-}
-void Bullet::Move()
-{
-	if (run)
-	{
-		rect.x+=dx[dir-1]*vel;
-		rect.y+=dy[dir-1]*vel;
-	}
-}
-bool Bullet::Dead()
-{
-	return dead;
-}
-void Bullet::Show(SDL_Surface *screen)
-{
-	ApplySurface(image,screen,rect);
 }

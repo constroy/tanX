@@ -2,23 +2,15 @@
 #define _BULLET_HPP
 
 #include <SDL/SDL.h>
-#include "config.hpp"
+#include "item.hpp"
 #include "util.hpp"
 
 extern SDL_Surface *bullet_clips[8];
 
-class Bullet
+class Bullet:public Item
 {
-	private:
-		SDL_Surface *image;
-		SDL_Rect rect;
-		int vel,dir;
-		bool dead;
 	public:
-		Bullet(int model,short x,short y,int v,int d);
-		void Move();
-		bool Dead();
-		void Show(SDL_Surface *screen);
+		Bullet(int model,short x,short y,int d,int p);
 };
 
 #endif

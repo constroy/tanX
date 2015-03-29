@@ -2,6 +2,9 @@
 
 SDL_Surface *tank_clips[8][8];
 
+const int bx[]={+18,+18,-4,+44};
+const int by[]={-4,+44,+18,+18};
+
 Tank::Tank(int model,short x,short y,int v,int h)
 {
 	clips=tank_clips[model];
@@ -33,52 +36,18 @@ void Tank::Ctrl(int cmd)
 void Tank::Work()
 {
 	if (reload) --reload;
-	if (run)
-	{
-		rect.x+=dx[dir-1]*vel;
-		rect.y+=dy[dir-1]*vel;
-	}
-
+	if (run) Move();
 }
 bool Tank::Ready()
 {
 	return reload==reload_time;
 }
-Bullet *Tank::Fire()
+Bullet Tank::Fire()
 {
 	int x,y;
-	switch (dir)
-	{
-		case 1:
-		{
-			x=rect.x+18;
-			y=rect.y-4;
-			break;
-		}
-		case 2:
-		{
-			x=rect.x+18;
-			y=rect.y+44;
-			break;
-		}
-		case 3:
-		{
-			x=rect.x-4;
-			y=rect.y+18;
-			break;
-		}
-		case 4:
-		{
-			x=rect.x+44;
-			y=rect.y+18;
-			break;
-		}
-	}
-	return new Bullet(0,x,y,16,dir);
-}
-bool Tank::Dead()
-{
-	return dead;
+	x=rect.x+bx[dir-1];
+	y=rect.y+by[dir-1];
+	return Bullet(0,x,y,dir,pow);
 }
 void Tank::Show(SDL_Surface *screen)
 {

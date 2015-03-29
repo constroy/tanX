@@ -2,31 +2,26 @@
 #define _TANK_HPP
 
 #include <SDL/SDL.h>
-#include "config.hpp"
+#include "item.hpp"
 #include "bullet.hpp"
 #include "util.hpp"
 
 extern SDL_Surface *tank_clips[8][8];
 
-class Tank
+class Tank:public Item
 {
 	private:
 		SDL_Surface **clips;
-		SDL_Surface *image;
-		SDL_Rect rect;
-		int vel,dir;
 		short hp;
 		int reload;
-		bool run,dead;
+		bool run;
 	public:
-		Tank(int model,short x,short y,int v,int h);
+		Tank(int model,short x,short y,int v=4,int h=40);
 		void Ctrl(int cmd);
 		void Work();
-		bool Dead();
 		bool Ready();
-		Bullet *Fire();
+		Bullet Fire();
 		void Show(SDL_Surface *screen);
-		
 };
 
 #endif

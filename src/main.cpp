@@ -4,6 +4,7 @@
 #include "config.hpp"
 #include "bullet.hpp"
 #include "tank.hpp"
+#include "terrain.hpp"
 #include "timer.hpp"
 #include "util.hpp"
 
@@ -22,14 +23,19 @@ bool Init()
 {
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING)==-1) return false;
+	//Set the window caption
+	SDL_WM_SetCaption("TanX",NULL);
+	//Set the window icon
+	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
 	//Initialize SDL_ttf
 	if (TTF_Init()==-1) return false;
 	//Set up screen
 	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,SDL_SWSURFACE);
 	//If there was an error in setting up the screen
 	if (screen==NULL) return false;
-	//Set the window caption
-	SDL_WM_SetCaption("TanX",NULL);
+	//Initialize the terrain
+	Terrain::GetInstance();
+	
 	return true;
 }
 bool LoadFiles()
@@ -37,8 +43,9 @@ bool LoadFiles()
 	char file_path[256];
 	
 	//Load the background image
-	background=LoadImage("../img/background.bmp");
-		
+	//background=LoadImage("../img/background.bmp");
+	//if (background==NULL) return false;
+	
 	for (int i=0;i<=0;++i) for (int j=0;j<=4;++j)
 	{
 		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
@@ -51,7 +58,8 @@ bool LoadFiles()
 	}
 	//Open the font
 	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
-	if (background==NULL) return false;
+	
+	
 	if (font==NULL) return false;
 	return true;
 }
@@ -73,8 +81,9 @@ int main(int argc,char *args[])
 	if (!LoadFiles()) return -1;
 	
 	Timer timer;
-	Tank tank(0,20,20,4,40);
-	list<Bullet*> bullets;
+	Terrain *terrain=Terrain::GetInstance();
+	Tank tank(0,20,20);
+	list<Bullet> bullets;
 	
 	LOOP:
 	{
@@ -106,21 +115,18 @@ int main(int argc,char *args[])
 		}
 		if (tank.Ready()) bullets.push_back(tank.Fire());
 		tank.Work();
-		for (list<Bullet*>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
+		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
-			(*i)->Move();
-			if ((*i)->Dead())
-			{
-				delete (*i);
-				bullets.erase(i);
-			}
+			i->Move();
+			//if (terrain.Blocked())
+			if (i->Dead()) bullets.erase(i);
 		}
 		//Fill the screen black
 		SDL_FillRect(screen,NULL,SDL_MapRGB(screen->format,0,0,0));
 		
 		tank.Show(screen);
-		for (list<Bullet*>::iterator i=bullets.begin();i!=bullets.end();++i) (*i)->Show(screen);
+		for (list<Bullet>::iterator i=bullets.begin();i!=bullets.end();++i) i->Show(screen);
 
 		//Update Screen
 		if (SDL_Flip(screen)==-1) return -1;
