@@ -1,12 +1,10 @@
 #include <bits/stdc++.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 #include "config.hpp"
+#include "util.hpp"
 #include "bullet.hpp"
 #include "tank.hpp"
 #include "terrain.hpp"
 #include "timer.hpp"
-#include "util.hpp"
 
 using namespace std;
 
@@ -19,12 +17,14 @@ SDL_Event event;
 
 TTF_Font *font=NULL;
 
+Terrain *terrain=NULL;
+
 bool Init()
 {
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING)==-1) return false;
 	//Set the window caption
-	SDL_WM_SetCaption("TanX",NULL);
+	SDL_WM_SetCaption("tanX",NULL);
 	//Set the window icon
 	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
 	//Initialize SDL_ttf
@@ -45,6 +45,8 @@ bool LoadFiles()
 	//if (background==NULL) return false;
 	Tank::LoadClip();
 	Bullet::LoadClip();
+	Terrain::LoadMap();
+	Terrain::LoadClip();
 	//Open the font
 	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
 	
@@ -52,12 +54,13 @@ bool LoadFiles()
 	if (font==NULL) return false;
 	return true;
 }
-void Clean()
+void CleanUp()
 {
 	//Free the loaded image
 	SDL_FreeSurface(background);
 	Tank::FreeClip();
 	Bullet::FreeClip();
+	Terrain::FreeClip();
 	//Close the font that was used
 	TTF_CloseFont(font);
 	TTF_Quit();
@@ -69,8 +72,8 @@ int main(int argc,char *args[])
 	if (!LoadFiles()) return -1;
 	
 	Timer timer;
-	Terrain *terrain=Terrain::GetInstance();
-	Tank tank(3,20,20);
+	terrain=Terrain::GetInstance();
+	Tank tank(0,60,60);
 	list<Bullet> bullets;
 	
 	LOOP:
@@ -106,16 +109,15 @@ int main(int argc,char *args[])
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
-			i->Move();
-			//if (terrain.Blocked())
-			if (i->Dead()) bullets.erase(i);
+			if (!i->Move()) bullets.erase(i);
 		}
 		//Fill the screen black
 		SDL_FillRect(screen,NULL,SDL_MapRGB(screen->format,0,0,0));
-		
+
+		terrain->Show(0,screen);
 		tank.Show(screen);
 		for (list<Bullet>::iterator i=bullets.begin();i!=bullets.end();++i) i->Show(screen);
-
+		terrain->Show(1,screen);
 		//Update Screen
 		if (SDL_Flip(screen)==-1) return -1;
 
@@ -126,6 +128,6 @@ int main(int argc,char *args[])
 	}
 	goto LOOP;
 	END:
-	Clean();
+	CleanUp();
 	return 0;
 }

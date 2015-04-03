@@ -7,7 +7,7 @@ void Bullet::LoadClip()
 	char file_path[256];
 	for (int i=0;i<1;++i)
 	{
-		sprintf(file_path,"../img/bullet/%d.bmp",i);
+		sprintf(file_path,"../img/bullet/%X.bmp",i);
 		clips[0]=LoadImage(file_path);
 	}
 }
@@ -22,5 +22,5 @@ Bullet::Bullet(int model,short x,short y,int d,int p)
 	vel=16;
 	dir=d;
 	pow=p;
-	dead=false;
+	mask=BULLET;
 }

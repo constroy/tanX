@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include "config.hpp"
 #include "util.hpp"
+#include "terrain.hpp"
 
 class Item
 {
@@ -12,10 +13,10 @@ class Item
 		SDL_Rect rect;
 		int vel,dir;
 		int pow;
-		bool dead;
+		ItemMask mask;
 	public:
 		bool Dead();
-		void Move();
+		bool Move();
 		void Show(SDL_Surface *screen);
 };
 

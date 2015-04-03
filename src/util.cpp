@@ -10,11 +10,11 @@ SDL_Surface *LoadImage(const char filename[],bool trans)
 	{
 		optimizedImage=SDL_DisplayFormat(loadedImage);
 		SDL_FreeSurface(loadedImage);
-	}
-	if (trans)
-	{
-		Uint32 color_key=SDL_MapRGB(optimizedImage->format,0XFF,0XFF,0XFF);
-		SDL_SetColorKey(optimizedImage,SDL_SRCCOLORKEY,color_key);
+		if (trans)
+		{
+			Uint32 color_key=SDL_MapRGB(optimizedImage->format,0XFF,0XFF,0XFF);
+			SDL_SetColorKey(optimizedImage,SDL_SRCCOLORKEY,color_key);
+		}
 	}
 	return optimizedImage;
 }

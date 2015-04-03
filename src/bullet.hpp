@@ -1,7 +1,6 @@
 #ifndef _BULLET_HPP
 #define _BULLET_HPP
 
-#include <cstdio>
 #include <SDL/SDL.h>
 #include "item.hpp"
 #include "util.hpp"

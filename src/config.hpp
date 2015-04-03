@@ -8,6 +8,7 @@ const int screen_bpp=32;
 const int screen_fps=40;
 
 //Item
+enum ItemMask{BULLET=2,TANK=4,SHIP=8};
 const int dx[]={0,0,-1,+1};
 const int dy[]={-1,+1,0,0};
 

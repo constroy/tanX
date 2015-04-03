@@ -1,7 +1,6 @@
 #ifndef _TANK_HPP
 #define _TANK_HPP
 
-#include <cstdio>
 #include <SDL/SDL.h>
 #include "item.hpp"
 #include "bullet.hpp"
@@ -15,6 +14,7 @@ class Tank:public Item
 		short hp;
 		int reload;
 		bool run;
+		bool dead;
 	public:
 		static void LoadClip();
 		static void FreeClip();

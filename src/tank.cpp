@@ -29,6 +29,7 @@ Tank::Tank(int model,short x,short y,int v,int h)
 	hp=h;
 	reload=0;
 	run=false;
+	mask=TANK;
 }
 void Tank::Ctrl(int cmd)
 {
@@ -65,7 +66,7 @@ Bullet Tank::Fire()
 }
 void Tank::Show(SDL_Surface *screen)
 {
-	SDL_Rect dst={rect.x,rect.y-8,hp,4};
+	SDL_Rect dst={rect.x,(Sint16)(rect.y-8),(Uint16)hp,4};
 	SDL_FillRect(screen,&dst,bar_color);
 	Item::Show(screen);
 }
