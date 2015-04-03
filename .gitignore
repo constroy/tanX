@@ -1,4 +1,5 @@
 scratch
+main
 *.o
 *.gch
 *.html

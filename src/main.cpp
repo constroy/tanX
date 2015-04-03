@@ -40,22 +40,11 @@ bool Init()
 }
 bool LoadFiles()
 {
-	char file_path[256];
-	
 	//Load the background image
 	//background=LoadImage("../img/background.bmp");
 	//if (background==NULL) return false;
-	
-	for (int i=0;i<=0;++i) for (int j=0;j<=4;++j)
-	{
-		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
-		tank_clips[i][j]=LoadImage(file_path,true);
-	}
-	for (int i=0;i<=0;++i)
-	{
-		sprintf(file_path,"../img/bullet/%d.bmp",i);
-		bullet_clips[0]=LoadImage(file_path);
-	}
+	Tank::LoadClip();
+	Bullet::LoadClip();
 	//Open the font
 	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
 	
@@ -67,9 +56,8 @@ void Clean()
 {
 	//Free the loaded image
 	SDL_FreeSurface(background);
-	for (int i=0;i<=0;++i) for (int j=0;j<4;++j) SDL_FreeSurface(tank_clips[i][j]);
-	for (int i=1;i<=4;++i) SDL_FreeSurface(bullet_clips[i]);
-
+	Tank::FreeClip();
+	Bullet::FreeClip();
 	//Close the font that was used
 	TTF_CloseFont(font);
 	TTF_Quit();
@@ -82,7 +70,7 @@ int main(int argc,char *args[])
 	
 	Timer timer;
 	Terrain *terrain=Terrain::GetInstance();
-	Tank tank(0,20,20);
+	Tank tank(3,20,20);
 	list<Bullet> bullets;
 	
 	LOOP:

@@ -1,14 +1,28 @@
 #include "tank.hpp"
 
-SDL_Surface *tank_clips[8][8];
+SDL_Surface *Tank::clips[6][6];
 
 const int bx[]={+18,+18,-4,+44};
 const int by[]={-4,+44,+18,+18};
 
+void Tank::LoadClip()
+{
+	char file_path[256];
+	for (int i=0;i<6;++i) for (int j=0;j<5;++j)
+	{
+		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
+		clips[i][j]=LoadImage(file_path,true);
+	}
+}
+void Tank::FreeClip()
+{
+	for (int i=0;i<6;++i)
+		for (int j=0;j<4;++j) SDL_FreeSurface(clips[i][j]);
+}
 Tank::Tank(int model,short x,short y,int v,int h)
 {
-	clips=tank_clips[model];
-	image=clips[1];
+	clip=clips[model];
+	image=clip[0];
 	rect=(SDL_Rect){x,y,40,40};
 	vel=v;
 	dir=0;
@@ -22,7 +36,7 @@ void Tank::Ctrl(int cmd)
 	{
 		run=true;
 		dir=cmd;
-		image=clips[dir];
+		image=clip[dir];
 	}
 	else if (cmd<0)
 	{
@@ -53,5 +67,5 @@ void Tank::Show(SDL_Surface *screen)
 {
 	SDL_Rect dst={rect.x,rect.y-8,hp,4};
 	SDL_FillRect(screen,&dst,bar_color);
-	ApplySurface(image,screen,rect);
+	Item::Show(screen);
 }
