@@ -14,8 +14,9 @@ const int dy[]={-1,+1,0,0};
 
 //Tank
 const int reload_time=16;
-const unsigned bar_color=0XFF00;
-const unsigned char bar_alpha=0X9F;
+const unsigned bar_back_color=0;
+const unsigned bar_front_color=0XFF00;
+const unsigned char bar_alpha=0X7F;
 //Terrain
 const int map_size=32;
 
