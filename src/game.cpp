@@ -74,9 +74,8 @@ int main(int argc,char *args[])
 	
 	Timer timer;
 	terrain=Terrain::GetInstance();
-	Tank tank(0,1,1);
+	Tank tank(0,1,1,4,25);
 	list<Bullet> bullets;
-	printf("%X\n",SDL_MapRGBA(screen->format,0,255,0,63));
 	LOOP:
 	{
 		timer.Start();
@@ -113,12 +112,13 @@ int main(int argc,char *args[])
 			if (!i->Move()) bullets.erase(i);
 		}
 		//Fill the screen black
-		SDL_FillRect(screen,NULL,SDL_MapRGB(screen->format,0,0,0));
+		//SDL_FillRect(screen,NULL,0);
 
 		terrain->Show(0,screen);
 		tank.Show(screen);
 		for (list<Bullet>::iterator i=bullets.begin();i!=bullets.end();++i) i->Show(screen);
 		terrain->Show(1,screen);
+		
 		//Update Screen
 		if (SDL_Flip(screen)==-1) return -1;
 
