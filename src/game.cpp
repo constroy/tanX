@@ -30,7 +30,8 @@ bool Init()
 	//Initialize SDL_ttf
 	if (TTF_Init()==-1) return false;
 	//Set up screen
-	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,SDL_SWSURFACE);
+	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,
+							SDL_HWSURFACE|SDL_ASYNCBLIT|SDL_DOUBLEBUF);
 	//If there was an error in setting up the screen
 	if (screen==NULL) return false;
 	//Initialize the terrain
@@ -73,9 +74,9 @@ int main(int argc,char *args[])
 	
 	Timer timer;
 	terrain=Terrain::GetInstance();
-	Tank tank(0,60,60);
+	Tank tank(0,1,1);
 	list<Bullet> bullets;
-	
+	printf("%X\n",SDL_MapRGBA(screen->format,0,255,0,63));
 	LOOP:
 	{
 		timer.Start();
