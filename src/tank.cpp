@@ -1,6 +1,7 @@
 #include "tank.hpp"
 
 SDL_Surface *Tank::clips[6][6];
+SDL_Surface *Tank::bar;
 
 const int bx[]={+18,+18,-4,+44};
 const int by[]={-4,+44,+18,+18};
@@ -13,11 +14,14 @@ void Tank::LoadClip()
 		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
 		clips[i][j]=LoadImage(file_path,true);
 	}
+	bar=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,40,4,32,0,0,0,0);
+	SDL_SetAlpha(bar,SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
 }
 void Tank::FreeClip()
 {
 	for (int i=0;i<6;++i)
 		for (int j=0;j<4;++j) SDL_FreeSurface(clips[i][j]);
+	SDL_FreeSurface(bar);
 }
 Tank::Tank(int model,short x,short y,int v,int h)
 {
@@ -66,10 +70,10 @@ Bullet Tank::Fire()
 }
 void Tank::Show(SDL_Surface *screen)
 {
-	SDL_Surface *bar=NULL;
-	bar=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,hp,4,32,0,0,0,0);
-	SDL_FillRect(bar,NULL,bar_color);
-	SDL_SetAlpha(bar,SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
+	SDL_Rect dst=bar->clip_rect;
+	dst.w=hp;
+	SDL_FillRect(bar,NULL,bar_back_color);
+	SDL_FillRect(bar,&dst,bar_front_color);
 	ApplySurface(bar,screen,rect.x,(short)(rect.y-8));
 	ApplySurface(image,screen,rect);
 }

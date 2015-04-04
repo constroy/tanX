@@ -10,6 +10,7 @@ class Tank:public Item
 {
 	private:
 		static SDL_Surface *clips[6][6];
+		static SDL_Surface *bar;
 		SDL_Surface **clip;
 		short hp;
 		int reload;
