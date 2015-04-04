@@ -4,7 +4,7 @@ LNFLAGS=-lSDL -lSDL_ttf
 SRC=$(wildcard *.cpp)
 HEAD=$(wildcard *.hpp)
 OBJ=$(SRC:.cpp=.o)
-EXE=main
+EXE=game
 
 all: $(OBJ) $(HEAD)
 	@$(CC) $(OBJ) $(CFLAGS) $(LNFLAGS) -o $(EXE)
