@@ -23,7 +23,7 @@ Tank::Tank(int model,short x,short y,int v,int h)
 {
 	clip=clips[model];
 	image=clip[0];
-	rect=(SDL_Rect){x,y,40,40};
+	rect=(SDL_Rect){(short)(x*20),(short)(y*20),40,40};
 	vel=v;
 	dir=0;
 	hp=h;
@@ -66,7 +66,10 @@ Bullet Tank::Fire()
 }
 void Tank::Show(SDL_Surface *screen)
 {
-	SDL_Rect dst={rect.x,(Sint16)(rect.y-8),(Uint16)hp,4};
-	SDL_FillRect(screen,&dst,bar_color);
-	Item::Show(screen);
+	SDL_Surface *bar=NULL;
+	bar=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,hp,4,32,0,0,0,0);
+	SDL_FillRect(bar,NULL,bar_color);
+	SDL_SetAlpha(bar,SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
+	ApplySurface(bar,screen,rect.x,(short)(rect.y-8));
+	ApplySurface(image,screen,rect);
 }
