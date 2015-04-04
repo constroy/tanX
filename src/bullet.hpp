@@ -13,6 +13,7 @@ class Bullet:public Item
 		static void LoadClip();
 		static void FreeClip();
 		Bullet(int model,short x,short y,int d,int p);
+		void Show(SDL_Surface *screen);
 };
 
 #endif

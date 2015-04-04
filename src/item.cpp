@@ -12,7 +12,3 @@ bool Item::Move()
 	}
 	return true;
 }
-void Item::Show(SDL_Surface *screen)
-{
-	ApplySurface(image,screen,rect);
-}

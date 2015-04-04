@@ -18,7 +18,7 @@ SDL_Surface *LoadImage(const char filename[],bool trans)
 	}
 	return optimizedImage;
 }
-void ApplySurface(SDL_Surface *src,SDL_Surface *dst,int x,int y)
+void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y)
 {
 	SDL_Rect offset={x,y};
 	SDL_BlitSurface(src,NULL,dst,&offset);

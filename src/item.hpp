@@ -15,9 +15,6 @@ class Item
 		int pow;
 		ItemMask mask;
 	public:
-		bool Dead();
 		bool Move();
-		void Show(SDL_Surface *screen);
 };
-
 #endif

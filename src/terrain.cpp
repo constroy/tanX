@@ -59,6 +59,6 @@ void Terrain::Show(int opt,SDL_Surface *screen)
 {
 	for (int i=0;i<map_size;++i) for (int j=0;j<map_size;++j)
 	{
-		if ((map[i][j]&1)==opt) ApplySurface(clips[(int)map[i][j]],screen,i*20,j*20);
+		if ((map[i][j]&1)==opt) ApplySurface(clips[(int)map[i][j]],screen,(short)(i*20),(short)(j*20));
 	}
 }

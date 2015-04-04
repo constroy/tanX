@@ -24,3 +24,7 @@ Bullet::Bullet(int model,short x,short y,int d,int p)
 	pow=p;
 	mask=BULLET;
 }
+void Bullet::Show(SDL_Surface *screen)
+{
+	ApplySurface(image,screen,rect);
+}
