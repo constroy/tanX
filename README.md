@@ -12,7 +12,6 @@ A 2D tank game using SDL
 + add some sound effects
 
 ## Futue Plan
-1. Client interface (UDP)  
-2. Game server (UDP)  
+1. Client interface based on UDP  
+2. Game server using UDP  
 3. AI interface  
-
