@@ -1,5 +1,4 @@
-scratch
-main
+game
 *.o
 *.gch
 *.html
