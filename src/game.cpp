@@ -73,12 +73,16 @@ int main(int argc,char *args[])
 	if (!LoadFiles()) return -1;
 	
 	Timer timer;
+	Timer fps;
+	int frame=0;
 	terrain=Terrain::GetInstance();
 	Tank tank(0,1,1,4,25);
 	list<Bullet> bullets;
+	fps.Start();
 	LOOP:
 	{
 		timer.Start();
+		++frame;
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type==SDL_QUIT) goto END;
@@ -105,12 +109,12 @@ int main(int argc,char *args[])
 			}
 		}
 		if (tank.Ready()) bullets.push_back(tank.Fire());
-		tank.Work();
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
 			if (!i->Move()) bullets.erase(i);
 		}
+		tank.Work();
 		//Fill the screen black
 		//SDL_FillRect(screen,NULL,0);
 
@@ -122,9 +126,15 @@ int main(int argc,char *args[])
 		//Update Screen
 		if (SDL_Flip(screen)==-1) return -1;
 
-		if (timer.GetTicks()<1000/screen_fps)
+		if (timer.GetTicks()*screen_fps<1000)
 		{
 			SDL_Delay(1000/screen_fps-timer.GetTicks());
+		}
+		if (fps.GetTicks()>=1000)
+		{
+			printf("fps:%.3f\n",frame*1000.0f/fps.GetTicks());
+			frame=0;
+			fps.Start();
 		}
 	}
 	goto LOOP;
