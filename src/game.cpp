@@ -12,10 +12,10 @@ const SDL_Color text_color={0X1F,0X3F,0XAF};
 
 SDL_Surface *screen=NULL;
 SDL_Surface *background=NULL;
-
 SDL_Event event;
 
 TTF_Font *font=NULL;
+Mix_Music *bgm=NULL;
 
 Terrain *terrain=NULL;
 
@@ -23,12 +23,14 @@ bool Init()
 {
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING)==-1) return false;
+	//Initialize SDL_ttf
+	if (TTF_Init()==-1) return false;
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)==-1) return false;
 	//Set the window caption
 	SDL_WM_SetCaption("tanX",NULL);
 	//Set the window icon
 	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
-	//Initialize SDL_ttf
-	if (TTF_Init()==-1) return false;
 	//Set up screen
 	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,
 							SDL_HWSURFACE|SDL_ASYNCBLIT|SDL_DOUBLEBUF);
@@ -36,7 +38,6 @@ bool Init()
 	if (screen==NULL) return false;
 	//Initialize the terrain
 	Terrain::GetInstance();
-	
 	return true;
 }
 bool LoadFiles()
@@ -48,22 +49,29 @@ bool LoadFiles()
 	Bullet::LoadClip();
 	Terrain::LoadMap();
 	Terrain::LoadClip();
+	
 	//Open the font
 	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
 	
-	
 	if (font==NULL) return false;
+	//Load the background music
+	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
+	if (bgm==NULL) return false;
 	return true;
 }
 void CleanUp()
 {
-	//Free the loaded image
-	SDL_FreeSurface(background);
 	Tank::FreeClip();
 	Bullet::FreeClip();
 	Terrain::FreeClip();
+	//Free the loaded image
+	SDL_FreeSurface(background);
+	//Free the music
+    Mix_FreeMusic(bgm);
 	//Close the font that was used
 	TTF_CloseFont(font);
+	//Quit SDL_mixer
+	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -71,7 +79,7 @@ int main(int argc,char *args[])
 {	
 	if (!Init()) return -1;
 	if (!LoadFiles()) return -1;
-	
+	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 	Timer timer;
 	Timer fps;
 	int frame=0;
