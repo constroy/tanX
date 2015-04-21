@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall
-LNFLAGS=-lSDL -lSDL_ttf
+LNFLAGS=-lSDL -lSDL_ttf -lSDL_mixer
 SRC=$(wildcard *.cpp)
 HEAD=$(wildcard *.hpp)
 OBJ=$(SRC:.cpp=.o)
