@@ -4,6 +4,7 @@ A 2D tank game using SDL
 ## Library
 + SDL 1.2.15
 + SDL_ttf 2.0.11
++ SDL_mixer 1.2.12
 
 ## To DO
 + complete the class tank
