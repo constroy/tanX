@@ -1,36 +1,12 @@
 #include "tank.hpp"
 
-SDL_Surface *Tank::clips[6][6];
-SDL_Surface *Tank::bar;
-
-const int bx[]={+18,+18,-4,+44};
-const int by[]={-4,+44,+18,+18};
-
-void Tank::LoadClip()
+Tank::Tank(int m,int _x,int _y,int v,int _hp)
 {
-	char file_path[256];
-	for (int i=0;i<6;++i) for (int j=0;j<5;++j)
-	{
-		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
-		clips[i][j]=LoadImage(file_path,true);
-	}
-	bar=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,40,4,32,0,0,0,0);
-	SDL_SetAlpha(bar,SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
-}
-void Tank::FreeClip()
-{
-	for (int i=0;i<6;++i)
-		for (int j=0;j<4;++j) SDL_FreeSurface(clips[i][j]);
-	SDL_FreeSurface(bar);
-}
-Tank::Tank(int model,short x,short y,int v,int h)
-{
-	clip=clips[model];
-	image=clip[0];
-	rect=(SDL_Rect){(short)(x*20),(short)(y*20),40,40};
+	model=m;
+	x=_x*20,y=_y*20,w=40,h=40;
 	vel=v;
 	dir=0;
-	hp=h;
+	hp=_hp;
 	reload=0;
 	run=false;
 	mask=TANK;
@@ -41,7 +17,6 @@ void Tank::Ctrl(int cmd)
 	{
 		run=true;
 		dir=cmd;
-		image=clip[dir];
 	}
 	else if (cmd<0)
 	{
@@ -62,13 +37,15 @@ bool Tank::Ready()
 	return reload==reload_time;
 }
 Bullet Tank::Fire()
-{
-	int x,y;
-	x=rect.x+bx[dir-1];
-	y=rect.y+by[dir-1];
-	return Bullet(0,x,y,dir,pow);
+{	
+	return Bullet(0,x+bx[dir-1],y+by[dir-1],dir,pow);
 }
-void Tank::Show(SDL_Surface *screen)
+int Tank::GetHp() const
+{
+	return hp;
+}
+/*
+void Show(SDL_Surface *screen)
 {
 	SDL_Rect dst=bar->clip_rect;
 	dst.w=hp;
@@ -77,3 +54,4 @@ void Tank::Show(SDL_Surface *screen)
 	ApplySurface(bar,screen,rect.x,(short)(rect.y-8));
 	ApplySurface(image,screen,rect);
 }
+*/

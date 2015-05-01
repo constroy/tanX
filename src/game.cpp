@@ -1,23 +1,24 @@
-#include <bits/stdc++.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
+#include <SDL/SDL_thread.h>
 #include "config.hpp"
-#include "util.hpp"
-#include "bullet.hpp"
-#include "tank.hpp"
-#include "terrain.hpp"
+#include "display.hpp"
+#include "model.hpp"
 #include "timer.hpp"
 
-using namespace std;
-
+//Font
 const SDL_Color text_color={0X1F,0X3F,0XAF};
-
-SDL_Surface *screen=NULL;
-SDL_Surface *background=NULL;
-SDL_Event event;
 
 TTF_Font *font=NULL;
 Mix_Music *bgm=NULL;
 
-Terrain *terrain=NULL;
+Display *display=NULL;
+
+Model model;
+
+list<Tank> &tanks=model.tanks;
+list<Bullet> &bullets=model.bullets;
+Terrain *&terrain=model.terrain;
 
 bool Init()
 {
@@ -31,28 +32,19 @@ bool Init()
 	SDL_WM_SetCaption("tanX",NULL);
 	//Set the window icon
 	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
-	//Set up screen
-	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,
-							SDL_HWSURFACE|SDL_ASYNCBLIT|SDL_DOUBLEBUF);
-	//If there was an error in setting up the screen
-	if (screen==NULL) return false;
-	//Initialize the terrain
-	Terrain::GetInstance();
+	//Get an instance of terrain
+	terrain=Terrain::GetInstance();
+	//Get an instance of display
+	display=Display::GetInstance();
+	//Init the display
+	display->Init();
 	return true;
 }
 bool LoadFiles()
 {
-	//Load the background image
-	//background=LoadImage("../img/background.bmp");
-	//if (background==NULL) return false;
-	Tank::LoadClip();
-	Bullet::LoadClip();
-	Terrain::LoadMap();
-	Terrain::LoadClip();
-	
+	terrain->LoadMap();
 	//Open the font
 	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
-	
 	if (font==NULL) return false;
 	//Load the background music
 	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
@@ -61,11 +53,7 @@ bool LoadFiles()
 }
 void CleanUp()
 {
-	Tank::FreeClip();
-	Bullet::FreeClip();
-	Terrain::FreeClip();
-	//Free the loaded image
-	SDL_FreeSurface(background);
+	display->Quit();
 	//Free the music
     Mix_FreeMusic(bgm);
 	//Close the font that was used
@@ -75,22 +63,27 @@ void CleanUp()
 	TTF_Quit();
 	SDL_Quit();
 }
+int Show(void *data)
+{
+	display->Show(model);
+	return 0;
+}
 int main(int argc,char *args[])
 {	
 	if (!Init()) return -1;
 	if (!LoadFiles()) return -1;
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
+
 	Timer timer;
-	Timer fps;
-	int frame=0;
-	terrain=Terrain::GetInstance();
-	Tank tank(0,1,1,4,25);
-	list<Bullet> bullets;
-	fps.Start();
+	
+	model.tanks.push_back(Tank(0,1,1,4,25));
+	
+	SDL_Thread *draw=SDL_CreateThread(Show,&model);
 	LOOP:
 	{
 		timer.Start();
-		++frame;
+		list<Tank>::iterator tank=tanks.begin();
+		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type==SDL_QUIT) goto END;
@@ -98,55 +91,41 @@ int main(int argc,char *args[])
 			{
 				switch (event.key.keysym.sym)
 				{
-					case SDLK_UP:tank.Ctrl(1);break;
-					case SDLK_DOWN:tank.Ctrl(2);break;
-					case SDLK_LEFT:tank.Ctrl(3);break;
-					case SDLK_RIGHT:tank.Ctrl(4);break;
-					case SDLK_SPACE:tank.Ctrl(0);break;
+					case SDLK_UP:tank->Ctrl(1);break;
+					case SDLK_DOWN:tank->Ctrl(2);break;
+					case SDLK_LEFT:tank->Ctrl(3);break;
+					case SDLK_RIGHT:tank->Ctrl(4);break;
+					case SDLK_SPACE:tank->Ctrl(0);break;
 				}
 			}
 			else if (event.type==SDL_KEYUP)
 			{
 				switch (event.key.keysym.sym)
 				{
-					case SDLK_UP:tank.Ctrl(-1);break;
-					case SDLK_DOWN:tank.Ctrl(-2);break;
-					case SDLK_LEFT:tank.Ctrl(-3);break;
-					case SDLK_RIGHT:tank.Ctrl(-4);break;
+					case SDLK_UP:tank->Ctrl(-1);break;
+					case SDLK_DOWN:tank->Ctrl(-2);break;
+					case SDLK_LEFT:tank->Ctrl(-3);break;
+					case SDLK_RIGHT:tank->Ctrl(-4);break;
 				}
 			}
 		}
-		if (tank.Ready()) bullets.push_back(tank.Fire());
+		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i)
+		{
+			if (i->Ready()) bullets.push_back(i->Fire());
+		}
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
 			if (!i->Move()) bullets.erase(i);
 		}
-		tank.Work();
-		//Fill the screen black
-		//SDL_FillRect(screen,NULL,0);
-
-		terrain->Show(0,screen);
-		tank.Show(screen);
-		for (list<Bullet>::iterator i=bullets.begin();i!=bullets.end();++i) i->Show(screen);
-		terrain->Show(1,screen);
+		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i) i->Work();
 		
-		//Update Screen
-		if (SDL_Flip(screen)==-1) return -1;
-
-		if (timer.GetTicks()*screen_fps<1000)
-		{
-			SDL_Delay(1000/screen_fps-timer.GetTicks());
-		}
-		if (fps.GetTicks()>=1000)
-		{
-			printf("fps:%.3f\n",frame*1000.0f/fps.GetTicks());
-			frame=0;
-			fps.Start();
-		}
+		
+		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
 	goto LOOP;
 	END:
+	SDL_KillThread(draw);
 	CleanUp();
 	return 0;
 }

@@ -1,30 +1,11 @@
 #include "bullet.hpp"
 
-SDL_Surface *Bullet::clips[6];
-
-void Bullet::LoadClip()
+Bullet::Bullet(int m,int _x,int _y,int d,int p)
 {
-	char file_path[256];
-	for (int i=0;i<1;++i)
-	{
-		sprintf(file_path,"../img/bullet/%X.bmp",i);
-		clips[0]=LoadImage(file_path);
-	}
-}
-void Bullet::FreeClip()
-{
-	for (int i=0;i<1;++i) SDL_FreeSurface(clips[i]);
-}
-Bullet::Bullet(int model,short x,short y,int d,int p)
-{
-	image=clips[model];
-	rect=(SDL_Rect){x,y,4,4};
+	model=m;
+	x=_x,y=_y,w=4,h=4;
 	vel=16;
 	dir=d;
 	pow=p;
 	mask=BULLET;
-}
-void Bullet::Show(SDL_Surface *screen)
-{
-	ApplySurface(image,screen,rect);
 }
