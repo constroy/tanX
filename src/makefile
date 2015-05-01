@@ -12,4 +12,4 @@ all: $(OBJ) $(HEAD)
 clean:
 	rm -f *.o *.gch $(EXE)
 count:
-	@echo "wc $(SRC) $(HEAD)"
+	@echo "wc -l $(SRC) $(HEAD)"
