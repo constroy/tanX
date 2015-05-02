@@ -44,14 +44,3 @@ int Tank::GetHp() const
 {
 	return hp;
 }
-/*
-void Show(SDL_Surface *screen)
-{
-	SDL_Rect dst=bar->clip_rect;
-	dst.w=hp;
-	SDL_FillRect(bar,NULL,bar_back_color);
-	SDL_FillRect(bar,&dst,bar_front_color);
-	ApplySurface(bar,screen,rect.x,(short)(rect.y-8));
-	ApplySurface(image,screen,rect);
-}
-*/
