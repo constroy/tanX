@@ -74,11 +74,10 @@ int main(int argc,char *args[])
 	if (!LoadFiles()) return -1;
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 
-	Timer timer;
-	
+	SDL_Thread *draw=SDL_CreateThread(Show,NULL);
+
 	model.tanks.push_back(Tank(0,1,1,4,25));
-	
-	SDL_Thread *draw=SDL_CreateThread(Show,&model);
+	Timer timer;
 	LOOP:
 	{
 		timer.Start();
@@ -119,7 +118,6 @@ int main(int argc,char *args[])
 			if (!i->Move()) bullets.erase(i);
 		}
 		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i) i->Work();
-		
 		
 		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
