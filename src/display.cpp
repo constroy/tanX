@@ -51,18 +51,25 @@ void Display::Init()
 		sprintf(file_path,"../img/terrain/%X.bmp",i);
 		terrain_clips[i]=LoadImage(file_path,true);
 	}
-	bar=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,40,4,32,0,0,0,0);
-	SDL_SetAlpha(bar,SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
+	for (int i=0;i<41;++i)
+	{
+		bar[i]=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,40,4,32,0,0,0,0);
+		SDL_SetAlpha(bar[i],SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
+		SDL_Rect dst=bar[i]->clip_rect;
+		dst.w=i;
+		SDL_FillRect(bar[i],NULL,bar_back_color);
+		SDL_FillRect(bar[i],&dst,bar_front_color);
+	}
 }
 void Display::Quit()
 {
 	for (int i=0;i<1;++i) SDL_FreeSurface(bullet_clips[i]);
 	for (int i=0;i<6;++i) for (int j=0;j<4;++j) SDL_FreeSurface(tank_clips[i][j]);
 	for (int i=0;i<128;++i) SDL_FreeSurface(terrain_clips[i]);
-	SDL_FreeSurface(bar);
+	for (int i=0;i<128;++i) SDL_FreeSurface(bar[i]);
 }
 //opt 0:bottom grid 1:top grid
-void Display::ShowTerrain(const Terrain *terrain,bool opt)
+void Display::ShowTerrain(Terrain *terrain,bool opt)
 {
 	for (int i=0;i<map_size;++i) for (int j=0;j<map_size;++j)
 	{
@@ -74,18 +81,19 @@ void Display::Show(const Model &model)
 {
 	const list<Tank> &tanks=model.tanks;
 	const list<Bullet> &bullets=model.bullets;
-	const Terrain *const &terrain=model.terrain;
+	Terrain *const &terrain=model.terrain;
 	Timer timer;
 	Timer fps;
 	//int frame=0;
-	
+	fps.Start();
 	LOOP:
 	{
-		//Fill the screen black
-		//SDL_FillRect(screen,NULL,0);
+		timer.Start();
+		//++frame;
 		ShowTerrain(terrain,0);
 		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
 		{
+			ApplySurface(bar[i->GetHp()],screen,i->GetX(),i->GetY()-8);
 			ApplySurface(tank_clips[i->GetModel()][i->GetDir()],screen,i->GetX(),i->GetY());
 		}
 		for (list<Bullet>::const_iterator i=bullets.begin();i!=bullets.end();++i)
@@ -107,7 +115,7 @@ void Display::Show(const Model &model)
 			frame=0;
 			fps.Start();
 		}
-		* */
+		*/
 	}
 	goto LOOP;
 }
