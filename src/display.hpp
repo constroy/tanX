@@ -13,8 +13,8 @@ class Display
 		SDL_Surface *screen;
 		SDL_Surface *background;
 		SDL_Surface *bar[41];
-		SDL_Surface *bullet_clips[6];
-		SDL_Surface *tank_clips[6][6];
+		SDL_Surface *bullet_clips[5];
+		SDL_Surface *tank_clips[5][5];
 		SDL_Surface *terrain_clips[128];
 		SDL_Surface *LoadImage(const char filename[],bool trans=false);
 		void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y);

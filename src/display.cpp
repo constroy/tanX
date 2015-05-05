@@ -38,17 +38,17 @@ void Display::Init()
 	char file_path[256];
 	for (int i=0;i<1;++i)
 	{
-		sprintf(file_path,"../img/bullet/%X.bmp",i);
+		sprintf(file_path,"../img/bullet/%d.bmp",i);
 		bullet_clips[i]=LoadImage(file_path);
 	}
-	for (int i=0;i<6;++i) for (int j=0;j<5;++j)
+	for (int i=0;i<5;++i) for (int j=0;j<5;++j)
 	{
 		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
 		tank_clips[i][j]=LoadImage(file_path,true);
 	}
 	for (int i=0;i<128;++i)
 	{
-		sprintf(file_path,"../img/terrain/%X.bmp",i);
+		sprintf(file_path,"../img/terrain/%x.bmp",i);
 		terrain_clips[i]=LoadImage(file_path,true);
 	}
 	for (int i=0;i<41;++i)
@@ -64,7 +64,7 @@ void Display::Init()
 void Display::Quit()
 {
 	for (int i=0;i<1;++i) SDL_FreeSurface(bullet_clips[i]);
-	for (int i=0;i<6;++i) for (int j=0;j<4;++j) SDL_FreeSurface(tank_clips[i][j]);
+	for (int i=0;i<5;++i) for (int j=0;j<5;++j) SDL_FreeSurface(tank_clips[i][j]);
 	for (int i=0;i<128;++i) SDL_FreeSurface(terrain_clips[i]);
 	for (int i=0;i<128;++i) SDL_FreeSurface(bar[i]);
 }
@@ -84,12 +84,12 @@ void Display::Show(const Model &model)
 	Terrain *const &terrain=model.terrain;
 	Timer timer;
 	Timer fps;
-	//int frame=0;
+	int frame=0;
 	fps.Start();
 	LOOP:
 	{
 		timer.Start();
-		//++frame;
+		++frame;
 		ShowTerrain(terrain,0);
 		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
 		{
@@ -106,16 +106,14 @@ void Display::Show(const Model &model)
 		
 		if (timer.GetTicks()*screen_fps<1000)
 		{
-			SDL_Delay(1000/screen_fps-timer.GetTicks());
+			SDL_Delay(1000/screen_fps-timer.GetTicks()+(frame&1));
 		}
-		/*
 		if (fps.GetTicks()>=1000)
 		{
 			printf("fps:%.3f\n",frame*1000.0f/fps.GetTicks());
 			frame=0;
 			fps.Start();
-		}
-		*/
+		}	
 	}
 	goto LOOP;
 }
