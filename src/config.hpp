@@ -20,8 +20,8 @@ const int dy[]={-1,+1,0,0};
 
 //Tank
 const int reload_time=16;
-const int bx[]={+18,+18,-4,+44};
-const int by[]={-4,+44,+18,+18};
+const int bx[]={+18,+18,-4,+43};
+const int by[]={-4,+43,+18,+18};
 
 //Terrain
 const int map_size=32;
