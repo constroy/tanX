@@ -1,4 +1,3 @@
-#include <SDL/SDL_ttf.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_thread.h>
 #include "config.hpp"
@@ -76,7 +75,8 @@ int main(int argc,char *args[])
 
 	SDL_Thread *draw=SDL_CreateThread(Show,NULL);
 
-	model.tanks.push_back(Tank(4,1,1,4,25));
+	model.tanks.push_back(Tank(2,1,1,4,25));
+	model.tanks.push_back(Tank(4,20,20,4,25));
 	Timer timer;
 	LOOP:
 	{

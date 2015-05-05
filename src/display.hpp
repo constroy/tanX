@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "config.hpp"
 #include "model.hpp"
 #include "timer.hpp"
