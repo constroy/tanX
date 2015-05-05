@@ -76,7 +76,7 @@ int main(int argc,char *args[])
 
 	SDL_Thread *draw=SDL_CreateThread(Show,NULL);
 
-	model.tanks.push_back(Tank(0,1,1,4,25));
+	model.tanks.push_back(Tank(4,1,1,4,25));
 	Timer timer;
 	LOOP:
 	{
