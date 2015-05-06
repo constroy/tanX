@@ -1,17 +1,17 @@
 #include "tank.hpp"
 
-Tank::Tank(int m,int _x,int _y,int v,int _hp)
+Tank::Tank(int m,int _x,int _y)
 {
 	model=m;
 	x=_x*20,y=_y*20,w=40,h=40;
-	vel=v;
-	dir=0;
-	hp=_hp;
+	vel=4;
+	dir=1;
+	hp=40;
 	reload=0;
 	run=false;
 	mask=TANK;
 }
-void Tank::Ctrl(int cmd)
+void Tank::Execute(int cmd)
 {
 	if (cmd>0)
 	{
@@ -27,18 +27,14 @@ void Tank::Ctrl(int cmd)
 		if (!reload) reload=reload_time;
 	}
 }
-void Tank::Work()
+bool Tank::Reload()
 {
-	if (reload) --reload;
-	if (run) Move();
+	if (reload) return reload--==reload_time;
+	return false;
 }
-bool Tank::Ready()
-{
-	return reload==reload_time;
-}
-Bullet Tank::Fire()
+Bullet Tank::Fire() const
 {	
-	return Bullet(0,x+bx[dir-1],y+by[dir-1],dir,pow);
+	return Bullet(0,x+18,y+18,dir,pow);
 }
 int Tank::GetHp() const
 {

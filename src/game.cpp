@@ -5,10 +5,6 @@
 #include "model.hpp"
 #include "timer.hpp"
 
-//Font
-const SDL_Color text_color={0X1F,0X3F,0XAF};
-
-TTF_Font *font=NULL;
 Mix_Music *bgm=NULL;
 
 Display *display=NULL;
@@ -23,28 +19,19 @@ bool Init()
 {
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING)==-1) return false;
-	//Initialize SDL_ttf
-	if (TTF_Init()==-1) return false;
-	//Initialize SDL_mixer
-	if (Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)==-1) return false;
 	//Set the window caption
 	SDL_WM_SetCaption("tanX",NULL);
 	//Set the window icon
 	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)==-1) return false;
 	//Get an instance of terrain
 	terrain=Terrain::GetInstance();
 	//Get an instance of display
 	display=Display::GetInstance();
 	//Init the display
 	display->Init();
-	return true;
-}
-bool LoadFiles()
-{
 	terrain->LoadMap();
-	//Open the font
-	font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
-	if (font==NULL) return false;
 	//Load the background music
 	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
 	if (bgm==NULL) return false;
@@ -55,33 +42,33 @@ void CleanUp()
 	display->Quit();
 	//Free the music
     Mix_FreeMusic(bgm);
-	//Close the font that was used
-	TTF_CloseFont(font);
 	//Quit SDL_mixer
 	Mix_CloseAudio();
-	TTF_Quit();
 	SDL_Quit();
 }
-int Show(void *data)
+int Show(void *exit)
 {
-	display->Show(model);
+	display->Show(model,(bool*)exit);
 	return 0;
 }
 int main(int argc,char *args[])
 {	
 	if (!Init()) return -1;
-	if (!LoadFiles()) return -1;
+	//play the BGM
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 
-	SDL_Thread *draw=SDL_CreateThread(Show,NULL);
-
-	model.tanks.push_back(Tank(2,1,1,4,25));
-	model.tanks.push_back(Tank(4,20,20,4,25));
+	bool exit=false;
+	SDL_Thread *draw=SDL_CreateThread(Show,&exit);
+	
+	tanks.push_back(Tank(1,1,1));
+	tanks.push_back(Tank(4,16,28));
 	Timer timer;
+
+	list<Tank>::iterator tank=tanks.begin();
 	LOOP:
 	{
 		timer.Start();
-		list<Tank>::iterator tank=tanks.begin();
+		
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -90,40 +77,56 @@ int main(int argc,char *args[])
 			{
 				switch (event.key.keysym.sym)
 				{
-					case SDLK_UP:tank->Ctrl(1);break;
-					case SDLK_DOWN:tank->Ctrl(2);break;
-					case SDLK_LEFT:tank->Ctrl(3);break;
-					case SDLK_RIGHT:tank->Ctrl(4);break;
-					case SDLK_SPACE:tank->Ctrl(0);break;
+					case SDLK_UP:tank->Execute(1);break;
+					case SDLK_DOWN:tank->Execute(2);break;
+					case SDLK_LEFT:tank->Execute(3);break;
+					case SDLK_RIGHT:tank->Execute(4);break;
+					case SDLK_SPACE:tank->Execute(0);break;
 				}
 			}
 			else if (event.type==SDL_KEYUP)
 			{
 				switch (event.key.keysym.sym)
 				{
-					case SDLK_UP:tank->Ctrl(-1);break;
-					case SDLK_DOWN:tank->Ctrl(-2);break;
-					case SDLK_LEFT:tank->Ctrl(-3);break;
-					case SDLK_RIGHT:tank->Ctrl(-4);break;
+					case SDLK_UP:tank->Execute(-1);break;
+					case SDLK_DOWN:tank->Execute(-2);break;
+					case SDLK_LEFT:tank->Execute(-3);break;
+					case SDLK_RIGHT:tank->Execute(-4);break;
 				}
 			}
 		}
 		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i)
 		{
-			if (i->Ready()) bullets.push_back(i->Fire());
+			
+			i->Move(+1);
+			if (terrain->Check(*i))
+			{
+				i->Move(-1);
+			}
+			/*
+			else
+			{
+				for (list<Tank>::iterator j=tanks.begin();j!=tanks.end();++j)
+				{
+					if (i!=j && )
+				}
+			}
+			*/
+			if (i->Reload()) bullets.push_back(i->Fire());
 		}
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
-			if (!i->Move()) bullets.erase(i);
+			i->Move(+1);
+			if (terrain->Check(*i))	bullets.erase(i);
 		}
-		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i) i->Work();
-		
 		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
 	goto LOOP;
 	END:
-	SDL_KillThread(draw);
+	Mix_HaltMusic();
+	exit=true;
+	SDL_WaitThread(draw,NULL);
 	CleanUp();
 	return 0;
 }

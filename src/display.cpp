@@ -33,6 +33,11 @@ void Display::ApplySurface(SDL_Surface *src,SDL_Surface *dst,SDL_Rect offset)
 }
 void Display::Init()
 {
+	//Initialize SDL_ttf
+	//TTF_Init();
+	//Open the font
+	//font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
+	
 	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,
 							SDL_HWSURFACE|SDL_ASYNCBLIT|SDL_DOUBLEBUF);
 	char file_path[256];
@@ -63,12 +68,15 @@ void Display::Init()
 }
 void Display::Quit()
 {
+	//Close the font that was used
+	//TTF_CloseFont(font);
+	//TTF_Quit();
 	for (int i=0;i<1;++i) SDL_FreeSurface(bullet_clips[i]);
 	for (int i=0;i<5;++i) for (int j=0;j<5;++j) SDL_FreeSurface(tank_clips[i][j]);
 	for (int i=0;i<128;++i) SDL_FreeSurface(terrain_clips[i]);
-	for (int i=0;i<128;++i) SDL_FreeSurface(bar[i]);
+	for (int i=0;i<41;++i) SDL_FreeSurface(bar[i]);
 }
-//opt 0:bottom grid 1:top grid
+//opt 0:lower grid 1:upper grid
 void Display::ShowTerrain(Terrain *terrain,bool opt)
 {
 	for (int i=0;i<map_size;++i) for (int j=0;j<map_size;++j)
@@ -77,7 +85,7 @@ void Display::ShowTerrain(Terrain *terrain,bool opt)
 		if ((grid&1)==opt) ApplySurface(terrain_clips[(int)grid],screen,i*20,j*20);
 	}
 }
-void Display::Show(const Model &model)
+void Display::Show(const Model &model,const bool *exit)
 {
 	const list<Tank> &tanks=model.tanks;
 	const list<Bullet> &bullets=model.bullets;
@@ -86,19 +94,19 @@ void Display::Show(const Model &model)
 	Timer fps;
 	int frame=0;
 	fps.Start();
-	LOOP:
+	while (!*exit)
 	{
 		timer.Start();
 		++frame;
 		ShowTerrain(terrain,0);
+		for (list<Bullet>::const_iterator i=bullets.begin();i!=bullets.end();++i)
+		{
+			ApplySurface(bullet_clips[i->GetModel()],screen,i->GetX(),i->GetY());
+		}
 		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
 		{
 			ApplySurface(bar[i->GetHp()],screen,i->GetX(),i->GetY()-8);
 			ApplySurface(tank_clips[i->GetModel()][i->GetDir()],screen,i->GetX(),i->GetY());
-		}
-		for (list<Bullet>::const_iterator i=bullets.begin();i!=bullets.end();++i)
-		{
-			ApplySurface(bullet_clips[i->GetModel()],screen,i->GetX(),i->GetY());
 		}
 		ShowTerrain(terrain,1);
 		//Update Screen
@@ -115,5 +123,4 @@ void Display::Show(const Model &model)
 			fps.Start();
 		}	
 	}
-	goto LOOP;
 }

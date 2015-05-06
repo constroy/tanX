@@ -15,11 +15,15 @@ void Terrain::LoadMap()
 	}
 	fclose(file);
 }
-bool Terrain::Check(ItemMask mask,int x0,int x1,int y0,int y1)
+bool Terrain::Check(const Item &it)
 {
+	int x0=it.GetX()/20;
+	int x1=(it.GetX()+it.GetW()-1)/20;
+	int y0=it.GetY()/20;
+	int y1=(it.GetY()+it.GetH()-1)/20;
 	for (int i=x0;i<=x1;++i) for (int j=y0;j<=y1;++j)
 	{
-		if (map[i][j]&mask) return true;
+		if (map[i][j]&it.GetMask()) return true;
 	}
 	return false;
 }

@@ -24,7 +24,7 @@ class Display
 	public:
 		static Display *GetInstance();
 		void Init();
-		void Show(const Model &model);
+		void Show(const Model &model,const bool *exit);
 		void Quit();
 };
 

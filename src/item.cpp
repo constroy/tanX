@@ -1,16 +1,12 @@
 #include "item.hpp"
 
-bool Item::Move()
+void Item::Move(int opt)
 {
-	x+=dx[dir-1]*vel;
-	y+=dy[dir-1]*vel;
-	if (Terrain::GetInstance()->Check(mask,x/20,(x+w-1)/20,y/20,(y+h-1)/20))
+	if (run)
 	{
-		x-=dx[dir-1]*vel;
-		y-=dy[dir-1]*vel;
-		return false;
+		x+=opt*dx[dir-1]*vel;
+		y+=opt*dy[dir-1]*vel;
 	}
-	return true;
 }
 int Item::GetModel() const
 {
@@ -24,7 +20,19 @@ int Item::GetY() const
 {
 	return y;
 }
+int Item::GetW() const
+{
+	return w;
+}
+int Item::GetH() const
+{
+	return h;
+}
 int Item::GetDir() const
 {
 	return dir;
+}
+int Item::GetMask() const
+{
+	return mask;
 }

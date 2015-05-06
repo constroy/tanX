@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include "config.hpp"
+#include "item.hpp"
 
 class Terrain
 {
@@ -12,7 +13,7 @@ class Terrain
 	public:
 		static Terrain *GetInstance();
 		void LoadMap();
-		bool Check(ItemMask mask,int x0,int x1,int y0,int y1);
+		bool Check(const Item &it);
 		char GetGrid(int x,int y) const;
 };
 

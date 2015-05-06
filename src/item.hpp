@@ -2,7 +2,6 @@
 #define _ITEM_HPP
 
 #include "config.hpp"
-#include "terrain.hpp"
 
 class Item
 {
@@ -11,12 +10,16 @@ class Item
 		int x,y,w,h;
 		int vel,dir;
 		int pow;
+		bool run;
 		ItemMask mask;
 	public:
-		bool Move();
+		void Move(int opt);
 		int GetModel() const;
 		int GetX() const;
 		int GetY() const;
+		int GetW() const;
+		int GetH() const;
 		int GetDir() const;
+		int GetMask() const;
 };
 #endif

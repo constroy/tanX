@@ -2,7 +2,7 @@
 #define _CONFIG_H
 
 //Control
-const int time_slot=25;
+const int time_slot=40;
 
 //Display
 const int screen_width=800;
@@ -19,9 +19,7 @@ const int dx[]={0,0,-1,+1};
 const int dy[]={-1,+1,0,0};
 
 //Tank
-const int reload_time=16;
-const int bx[]={+18,+18,-4,+40};
-const int by[]={-4,+40,+18,+18};
+const int reload_time=8;
 
 //Terrain
 const int map_size=32;
