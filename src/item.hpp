@@ -22,4 +22,5 @@ class Item
 		int GetDir() const;
 		int GetMask() const;
 };
+
 #endif
