@@ -105,8 +105,11 @@ void Display::Show(const Model &model,const bool *exit)
 		}
 		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
 		{
-			ApplySurface(bar[i->GetHp()],screen,i->GetX(),i->GetY()-8);
 			ApplySurface(tank_clips[i->GetModel()][i->GetDir()],screen,i->GetX(),i->GetY());
+		}
+		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
+		{
+			ApplySurface(bar[i->GetHp()],screen,i->GetX(),i->GetY()-8);
 		}
 		ShowTerrain(terrain,1);
 		//Update Screen
