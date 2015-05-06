@@ -31,6 +31,7 @@ bool Init()
 	display=Display::GetInstance();
 	//Init the display
 	display->Init();
+	//Load the map
 	terrain->LoadMap();
 	//Load the background music
 	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
@@ -39,6 +40,7 @@ bool Init()
 }
 void CleanUp()
 {
+	//Quit display
 	display->Quit();
 	//Free the music
     Mix_FreeMusic(bgm);
@@ -51,17 +53,25 @@ int Show(void *exit)
 	display->Show(model,(bool*)exit);
 	return 0;
 }
+bool Check(const Item &a,const Item &b)
+{
+	if (a.GetX()>=b.GetX()+b.GetW()) return false;
+	if (a.GetX()+a.GetW()<=b.GetX()) return false;
+	if (a.GetY()>=b.GetY()+b.GetH()) return false;
+	if (a.GetY()+a.GetH()<=b.GetY()) return false;
+	return true;
+}
 int main(int argc,char *args[])
 {	
 	if (!Init()) return -1;
-	//play the BGM
-	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 
+	//Start drwing
 	bool exit=false;
 	SDL_Thread *draw=SDL_CreateThread(Show,&exit);
-	
+	//Play the BGM
+	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 	tanks.push_back(Tank(1,1,1));
-	tanks.push_back(Tank(4,16,28));
+	tanks.push_back(Tank(4,16,24));
 	Timer timer;
 
 	list<Tank>::iterator tank=tanks.begin();
@@ -99,26 +109,28 @@ int main(int argc,char *args[])
 		{
 			
 			i->Move(+1);
-			if (terrain->Check(*i))
-			{
-				i->Move(-1);
-			}
-			/*
+			if (terrain->Check(*i)) i->Move(-1);
 			else
 			{
 				for (list<Tank>::iterator j=tanks.begin();j!=tanks.end();++j)
 				{
-					if (i!=j && )
+					if (i!=j && Check(*i,*j)) i->Move(-1);
 				}
 			}
-			*/
 			if (i->Reload()) bullets.push_back(i->Fire());
 		}
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
 			i->Move(+1);
-			if (terrain->Check(*i))	bullets.erase(i);
+			if (terrain->Check(*i)) bullets.erase(i);
+			else
+			{
+				for (list<Tank>::iterator k=tanks.begin();k!=tanks.end();++k)
+				{
+					if (Check(*i,*k)) bullets.erase(i);
+				}
+			}
 		}
 		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
