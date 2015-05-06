@@ -8,6 +8,5 @@ EXE=game
 
 all: $(OBJ) $(HEAD)
 	@$(CC) $(OBJ) $(CFLAGS) $(LNFLAGS) -o $(EXE)
-
 clean:
 	rm -f *.o *.gch $(EXE)
