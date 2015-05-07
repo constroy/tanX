@@ -3,10 +3,14 @@ CXXFLAGS=-O2
 LIBS=-lSDL -lSDL_ttf -lSDL_mixer
 SRC=$(wildcard *.cxx)
 HEAD=$(wildcard *.hxx)
-OBJ=$(SRC:.cpp=.o)
-EXE=game
+OBJ=$(SRC:.cxx=.o)
+EXEC=game
 
-all: $(OBJ) $(HEAD)
-	@$(CXX) $(OBJ) $(CXXFLAGS) $(LIBS) -o $(EXE)
+$(EXEC): $(OBJ)
+	$(CXX) $(CXXFLAGS) $(LIBS) -o $(EXEC) $(OBJ)
+
+$(OBJ): $(HEAD) $(SRC)
+	$(CXX) -c $(CXXFLAGS) $(SRC)
+
 clean:
-	rm -f *.o *.gch $(EXE)
+	rm -f *.o *.gch $(EXEC)
