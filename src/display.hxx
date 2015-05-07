@@ -1,12 +1,12 @@
-#ifndef _DISPLAY_HPP
-#define _DISPLAY_HPP
+#ifndef _DISPLAY_HXX
+#define _DISPLAY_HXX
 
 #include <cstdio>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
-#include "config.hpp"
-#include "model.hpp"
-#include "timer.hpp"
+#include "config.hxx"
+#include "model.hxx"
+#include "timer.hxx"
 
 class Display
 {

@@ -1,4 +1,4 @@
-#include "terrain.hpp"
+#include "terrain.hxx"
 
 Terrain *Terrain::GetInstance()
 {

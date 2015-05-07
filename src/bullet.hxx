@@ -1,7 +1,7 @@
-#ifndef _BULLET_HPP
-#define _BULLET_HPP
+#ifndef _BULLET_HXX
+#define _BULLET_HXX
 
-#include "item.hpp"
+#include "item.hxx"
 
 class Bullet:public Item
 {

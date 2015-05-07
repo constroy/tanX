@@ -1,4 +1,4 @@
-#include "display.hpp"
+#include "display.hxx"
 
 Display *Display::GetInstance()
 {

@@ -4,7 +4,7 @@ LIBS=-lSDL -lSDL_ttf -lSDL_mixer
 SRC=$(wildcard *.cxx)
 HEAD=$(wildcard *.hxx)
 OBJ=$(SRC:.cxx=.o)
-EXEC=game
+EXEC=tanX
 
 $(EXEC): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(LIBS) -o $(EXEC) $(OBJ)

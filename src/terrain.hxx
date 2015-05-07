@@ -1,9 +1,9 @@
-#ifndef _TERRAIN_HPP
-#define _TERRAIN_HPP
+#ifndef _TERRAIN_HXX
+#define _TERRAIN_HXX
 
 #include <cstdio>
-#include "config.hpp"
-#include "item.hpp"
+#include "config.hxx"
+#include "item.hxx"
 
 class Terrain
 {

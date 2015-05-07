@@ -1,7 +1,7 @@
-#ifndef _ITEM_HPP
-#define _ITEM_HPP
+#ifndef _ITEM_HXX
+#define _ITEM_HXX
 
-#include "config.hpp"
+#include "config.hxx"
 
 class Item
 {
@@ -22,8 +22,5 @@ class Item
 		int GetDir() const;
 		int GetMask() const;
 };
-static int Item::GetModel() const
-{
-	return model;
-}
+
 #endif

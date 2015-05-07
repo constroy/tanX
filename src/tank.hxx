@@ -1,7 +1,7 @@
-#ifndef _TANK_HPP
-#define _TANK_HPP
+#ifndef _TANK_HXX
+#define _TANK_HXX
 
-#include "bullet.hpp"
+#include "bullet.hxx"
 
 class Tank:public Item
 {

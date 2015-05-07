@@ -1,9 +1,9 @@
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_thread.h>
-#include "config.hpp"
-#include "display.hpp"
-#include "model.hpp"
-#include "timer.hpp"
+#include "config.hxx"
+#include "display.hxx"
+#include "model.hxx"
+#include "timer.hxx"
 
 Mix_Music *bgm=NULL;
 

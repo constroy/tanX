@@ -1,5 +1,5 @@
-#ifndef _TIMER_HPP
-#define _TIMER_HPP
+#ifndef _TIMER_HXX
+#define _TIMER_HXX
 
 class Timer
 {

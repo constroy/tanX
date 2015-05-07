@@ -1,4 +1,4 @@
-#include "tank.hpp"
+#include "tank.hxx"
 
 Tank::Tank(int m,int _x,int _y)
 {
