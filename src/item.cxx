@@ -8,10 +8,7 @@ void Item::Move(int opt)
 		y+=opt*dy[dir-1]*vel;
 	}
 }
-int Item::GetModel() const
-{
-	return model;
-}
+
 int Item::GetX() const
 {
 	return x;

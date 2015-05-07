@@ -22,5 +22,8 @@ class Item
 		int GetDir() const;
 		int GetMask() const;
 };
-
+static int Item::GetModel() const
+{
+	return model;
+}
 #endif
