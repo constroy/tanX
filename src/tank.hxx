@@ -1,7 +1,7 @@
 #ifndef _TANK_HXX
 #define _TANK_HXX
 
-#include "bullet.hxx"
+#include "item.hxx"
 
 class Tank:public Item
 {
@@ -15,7 +15,6 @@ class Tank:public Item
 		bool Dead();
 		void Execute(int cmd);
 		int GetHp() const;
-		Bullet Fire() const;
 		bool Reload();
 };
 

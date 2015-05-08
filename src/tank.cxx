@@ -31,25 +31,20 @@ bool Tank::Dead()
 void Tank::Execute(int cmd)
 {
 	if (die) return;
+	if (cmd>0)
 	{
-		if (cmd>0)
-		{
-			run=true;
-			dir=cmd;
-		}
-		else if (cmd<0)
-		{
-			if (cmd==-dir) run=false;
-		}
-		else
-		{
-			if (!reload) reload=reload_time;
-		}
+		run=true;
+		dir=cmd;
 	}
-}
-Bullet Tank::Fire() const
-{	
-	return Bullet(0,x+18,y+18,dir,pow);
+	else if (cmd<0)
+	{
+		if (cmd==-dir) run=false;
+	}
+	else
+	{
+		if (!reload) reload=reload_time;
+	}
+
 }
 int Tank::GetHp() const
 {
