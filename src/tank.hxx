@@ -8,13 +8,15 @@ class Tank:public Item
 	private:
 		int hp;
 		int reload;
-		bool dead;
+		int die;
 	public:
 		Tank(int img,int x,int y);
+		void Damage(int damage);
+		bool Dead();
 		void Execute(int cmd);
-		bool Reload();
-		Bullet Fire() const;
 		int GetHp() const;
+		Bullet Fire() const;
+		bool Reload();
 };
 
 #endif
