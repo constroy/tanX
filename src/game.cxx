@@ -5,6 +5,8 @@
 #include "model.hxx"
 #include "timer.hxx"
 
+#define DEMO
+
 Mix_Music *bgm=NULL;
 
 Display *display=NULL;
@@ -70,11 +72,13 @@ int main(int argc,char *args[])
 	SDL_Thread *draw=SDL_CreateThread(Show,&exit);
 	//Play the BGM
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
-	tanks.push_back(Tank(1,1,1));
-	tanks.push_back(Tank(4,16,24));
-	Timer timer;
 
+#ifdef DEMO
+	for (int i=0;i<3;++i) for (int j=0;j<3;++j) tanks.push_back(Tank(rand()%5,i*8+4,j*8+12));
 	list<Tank>::iterator tank=tanks.begin();
+#endif
+
+	Timer timer;	
 	LOOP:
 	{
 		timer.Start();
@@ -105,19 +109,23 @@ int main(int argc,char *args[])
 				}
 			}
 		}
-		for (list<Tank>::iterator i=tanks.begin();i!=tanks.end();++i)
+		for (list<Tank>::iterator i=tanks.begin(),j=tanks.begin();i!=tanks.end();i=j)
 		{
-			
+			++j;
+			if (i->Dead()) tanks.erase(i);
 			i->Move(+1);
 			if (terrain->Check(*i)) i->Move(-1);
 			else
 			{
-				for (list<Tank>::iterator j=tanks.begin();j!=tanks.end();++j)
+				for (list<Tank>::iterator k=tanks.begin();k!=tanks.end();++k)
 				{
-					if (i!=j && Check(*i,*j)) i->Move(-1);
+					if (i!=k && Check(*i,*k)) i->Move(-1);
 				}
 			}
-			if (i->Reload()) bullets.push_back(i->Fire());
+			if (i->Reload())
+			{
+				bullets.push_back(Bullet(0,i->GetX()+18,i->GetY()+18,i->GetDir(),i->GetPow()));
+			}
 		}
 		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
@@ -128,7 +136,11 @@ int main(int argc,char *args[])
 			{
 				for (list<Tank>::iterator k=tanks.begin();k!=tanks.end();++k)
 				{
-					if (Check(*i,*k)) bullets.erase(i);
+					if (Check(*i,*k))
+					{
+						k->Damage(i->GetPow());
+						bullets.erase(i);
+					}
 				}
 			}
 		}
