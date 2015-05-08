@@ -1,5 +1,5 @@
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef _CONFIG_HXX
+#define _CONFIG_HXX
 
 //Control
 const int time_slot=40;
@@ -20,6 +20,7 @@ const int dy[]={-1,+1,0,0};
 
 //Tank
 const int reload_time=8;
+const int die_time=8;
 
 //Terrain
 const int map_size=32;
