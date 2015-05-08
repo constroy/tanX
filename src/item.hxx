@@ -20,6 +20,7 @@ class Item
 		int GetW() const;
 		int GetH() const;
 		int GetDir() const;
+		int GetPow() const;
 		int GetMask() const;
 };
 

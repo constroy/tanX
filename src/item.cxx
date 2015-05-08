@@ -32,6 +32,10 @@ int Item::GetDir() const
 {
 	return dir;
 }
+int Item::GetPow() const
+{
+	return pow;
+}
 int Item::GetMask() const
 {
 	return mask;
