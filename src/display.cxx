@@ -1,5 +1,10 @@
 #include "display.hxx"
 
+inline void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y)
+{
+	SDL_Rect offset={x,y};
+	SDL_BlitSurface(src,NULL,dst,&offset);
+}
 Display *Display::GetInstance()
 {
 	static Display instance;
@@ -21,15 +26,6 @@ SDL_Surface *Display::LoadImage(const char filename[],bool trans)
 		}
 	}
 	return optimizedImage;
-}
-void Display::ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y)
-{
-	SDL_Rect offset={x,y};
-	SDL_BlitSurface(src,NULL,dst,&offset);
-}
-void Display::ApplySurface(SDL_Surface *src,SDL_Surface *dst,SDL_Rect offset)
-{
-	SDL_BlitSurface(src,NULL,dst,&offset);
 }
 void Display::Init()
 {
@@ -81,8 +77,8 @@ void Display::ShowTerrain(Terrain *terrain,bool opt)
 {
 	for (int i=0;i<map_size;++i) for (int j=0;j<map_size;++j)
 	{
-		char grid=terrain->GetGrid(i,j);
-		if ((grid&1)==opt) ApplySurface(terrain_clips[(int)grid],screen,i*20,j*20);
+		int grid=terrain->GetGrid(i,j);
+		if ((grid&1)==opt) ApplySurface(terrain_clips[grid],screen,i*20,j*20);
 	}
 }
 void Display::Show(const Model &model,const bool *exit)

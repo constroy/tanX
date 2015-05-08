@@ -18,14 +18,12 @@ class Display
 		SDL_Surface *tank_clips[5][5];
 		SDL_Surface *terrain_clips[128];
 		SDL_Surface *LoadImage(const char filename[],bool trans=false);
-		void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y);
-		void ApplySurface(SDL_Surface *src,SDL_Surface *dst,SDL_Rect offset);
 		void ShowTerrain(Terrain *terrain,bool opt);
 	public:
 		static Display *GetInstance();
 		void Init();
-		void Show(const Model &model,const bool *exit);
 		void Quit();
+		void Show(const Model &model,const bool *exit);
 };
 
 #endif
