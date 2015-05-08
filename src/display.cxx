@@ -56,12 +56,12 @@ void Display::Init()
 		sprintf(file_path,"../img/terrain/%x.bmp",i);
 		terrain_clips[i]=LoadImage(file_path,true);
 	}
-	for (int i=0;i<41;++i)
+	for (int i=0;i<9;++i)
 	{
 		bar[i]=SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA,40,4,32,0,0,0,0);
 		SDL_SetAlpha(bar[i],SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
 		SDL_Rect dst=bar[i]->clip_rect;
-		dst.w=i;
+		dst.w=i*5;
 		SDL_FillRect(bar[i],NULL,bar_back_color);
 		SDL_FillRect(bar[i],&dst,bar_front_color);
 	}
@@ -74,7 +74,7 @@ void Display::Quit()
 	for (int i=0;i<1;++i) SDL_FreeSurface(bullet_clips[i]);
 	for (int i=0;i<5;++i) for (int j=0;j<5;++j) SDL_FreeSurface(tank_clips[i][j]);
 	for (int i=0;i<128;++i) SDL_FreeSurface(terrain_clips[i]);
-	for (int i=0;i<41;++i) SDL_FreeSurface(bar[i]);
+	for (int i=0;i<9;++i) SDL_FreeSurface(bar[i]);
 }
 //opt 0:lower grid 1:upper grid
 void Display::ShowTerrain(Terrain *terrain,bool opt)

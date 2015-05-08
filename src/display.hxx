@@ -13,7 +13,7 @@ class Display
 	private:
 		SDL_Surface *screen;
 		SDL_Surface *background;
-		SDL_Surface *bar[41];
+		SDL_Surface *bar[9];
 		SDL_Surface *bullet_clips[5];
 		SDL_Surface *tank_clips[5][5];
 		SDL_Surface *terrain_clips[128];
