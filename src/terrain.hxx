@@ -17,4 +17,9 @@ class Terrain
 		char GetGrid(int x,int y) const;
 };
 
+inline char Terrain::GetGrid(int x,int y) const
+{
+	return map[x][y];
+}
+
 #endif

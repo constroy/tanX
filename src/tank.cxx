@@ -46,10 +46,6 @@ void Tank::Execute(int cmd)
 	}
 
 }
-int Tank::GetHp() const
-{
-	return hp;
-}
 bool Tank::Reload()
 {
 	if (!die && reload) return reload--==reload_time;

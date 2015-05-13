@@ -27,7 +27,3 @@ bool Terrain::Check(const Item &it)
 	}
 	return false;
 }
-char Terrain::GetGrid(int x,int y) const
-{
-	return map[x][y];
-}

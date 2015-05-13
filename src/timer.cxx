@@ -3,14 +3,14 @@
 
 Timer::Timer()
 {
-	startTicks=pausedTicks=0;
+	s_ticks=p_ticks=0;
 	started=paused=false;
 }
 void Timer::Start()
 {
 	started=true;
 	paused=false;
-	startTicks=SDL_GetTicks();
+	s_ticks=SDL_GetTicks();
 }
 void Timer::Stop()
 {
@@ -21,7 +21,7 @@ void Timer::Pause()
 	if (started && !paused)
 	{
 		paused=true;
-		pausedTicks=SDL_GetTicks()-startTicks;
+		p_ticks=SDL_GetTicks()-s_ticks;
 	}
 }
 void Timer::Unpause()
@@ -29,23 +29,7 @@ void Timer::Unpause()
 	if (paused)
 	{
 		paused=false;
-		startTicks=SDL_GetTicks()-pausedTicks;
-		pausedTicks=0;
+		s_ticks=SDL_GetTicks()-p_ticks;
+		p_ticks=0;
 	}
-}
-int Timer::GetTicks()
-{
-	if (started)
-	{
-		return paused?pausedTicks:SDL_GetTicks()-startTicks;
-	}
-	else return 0;
-}
-bool Timer::IsStarted()
-{
-	return started;
-}
-bool Timer::IsPaused()
-{
-	return paused;
 }

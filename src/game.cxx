@@ -7,9 +7,9 @@
 
 #define DEMO
 
-Mix_Music *bgm=NULL;
+Mix_Music *bgm=nullptr;
 
-Display *display=NULL;
+Display *display=nullptr;
 
 Model model;
 
@@ -22,9 +22,9 @@ bool Init()
 	//Initialize all SDL subsystems
 	if (SDL_Init(SDL_INIT_EVERYTHING)==-1) return false;
 	//Set the window caption
-	SDL_WM_SetCaption("tanX",NULL);
+	SDL_WM_SetCaption("tanX",nullptr);
 	//Set the window icon
-	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),NULL);
+	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),nullptr);
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)==-1) return false;
 	//Get an instance of terrain
@@ -37,7 +37,7 @@ bool Init()
 	terrain->LoadMap();
 	//Load the background music
 	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
-	if (bgm==NULL) return false;
+	if (bgm==nullptr) return false;
 	return true;
 }
 void CleanUp()
@@ -109,7 +109,7 @@ int main(int argc,char *args[])
 				}
 			}
 		}
-		for (list<Tank>::iterator i=tanks.begin(),j=tanks.begin();i!=tanks.end();i=j)
+		for (auto i=tanks.begin(),j=tanks.begin();i!=tanks.end();i=j)
 		{
 			++j;
 			if (i->Dead()) tanks.erase(i);
@@ -117,7 +117,7 @@ int main(int argc,char *args[])
 			if (terrain->Check(*i)) i->Move(-1);
 			else
 			{
-				for (list<Tank>::iterator k=tanks.begin();k!=tanks.end();++k)
+				for (auto k=tanks.begin();k!=tanks.end();++k)
 				{
 					if (i!=k && Check(*i,*k)) i->Move(-1);
 				}
@@ -127,14 +127,14 @@ int main(int argc,char *args[])
 				bullets.push_back(Bullet(0,i->GetX()+18,i->GetY()+18,i->GetDir(),i->GetPow()));
 			}
 		}
-		for (list<Bullet>::iterator i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
+		for (auto i=bullets.begin(),j=bullets.begin();i!=bullets.end();i=j)
 		{
 			++j;
 			i->Move(+1);
 			if (terrain->Check(*i)) bullets.erase(i);
 			else
 			{
-				for (list<Tank>::iterator k=tanks.begin();k!=tanks.end();++k)
+				for (auto k=tanks.begin();k!=tanks.end();++k)
 				{
 					if (Check(*i,*k))
 					{
@@ -150,7 +150,7 @@ int main(int argc,char *args[])
 	END:
 	Mix_HaltMusic();
 	exit=true;
-	SDL_WaitThread(draw,NULL);
+	SDL_WaitThread(draw,nullptr);
 	CleanUp();
 	return 0;
 }

@@ -18,4 +18,8 @@ class Tank:public Item
 		bool Reload();
 };
 
+inline int Tank::GetHp() const
+{
+	return hp;
+}
 #endif

@@ -24,4 +24,37 @@ class Item
 		int GetMask() const;
 };
 
+inline int Item::GetModel() const
+{
+	return model;
+}
+inline int Item::GetX() const
+{
+	return x;
+}
+inline int Item::GetY() const
+{
+	return y;
+}
+inline int Item::GetW() const
+{
+	return w;
+}
+inline int Item::GetH() const
+{
+	return h;
+}
+inline int Item::GetDir() const
+{
+	return dir;
+}
+inline int Item::GetPow() const
+{
+	return pow;
+}
+inline int Item::GetMask() const
+{
+	return mask;
+}
+
 #endif

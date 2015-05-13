@@ -4,8 +4,8 @@
 class Timer
 {
 	private:
-		int startTicks;
-		int pausedTicks;
+		int s_ticks;
+		int p_ticks;
 		bool paused;
 		bool started;
 	public:
@@ -14,9 +14,23 @@ class Timer
 		void Stop();
 		void Pause();
 		void Unpause();
-		int GetTicks();
-		bool IsStarted();
-		bool IsPaused();
+		int GetTicks() const;
+		bool IsStarted() const;
+		bool IsPaused() const;
 };
+
+inline int Timer::GetTicks() const
+{
+	if (started) return paused?p_ticks:SDL_GetTicks()-s_ticks;
+	else return 0;
+}
+inline bool Timer::IsStarted() const
+{
+	return started;
+}
+inline bool Timer::IsPaused() const
+{
+	return paused;
+}
 
 #endif

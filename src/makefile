@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-O2
+CXXFLAGS=-std=c++11 -O2
 LIBS=-lSDL -lSDL_ttf -lSDL_mixer
 SRC=$(wildcard *.cxx)
 HEAD=$(wildcard *.hxx)

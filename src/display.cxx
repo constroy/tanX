@@ -3,7 +3,7 @@
 inline void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y)
 {
 	SDL_Rect offset={x,y};
-	SDL_BlitSurface(src,NULL,dst,&offset);
+	SDL_BlitSurface(src,nullptr,dst,&offset);
 }
 Display *Display::GetInstance()
 {
@@ -12,8 +12,8 @@ Display *Display::GetInstance()
 }
 SDL_Surface *Display::LoadImage(const char filename[],bool trans)
 {
-	SDL_Surface *loadedImage=NULL;
-	SDL_Surface *optimizedImage=NULL;
+	SDL_Surface *loadedImage=nullptr;
+	SDL_Surface *optimizedImage=nullptr;
 	loadedImage=SDL_LoadBMP(filename);
 	if (loadedImage)
 	{
@@ -58,7 +58,7 @@ void Display::Init()
 		SDL_SetAlpha(bar[i],SDL_SRCALPHA|SDL_RLEACCEL,bar_alpha);
 		SDL_Rect dst=bar[i]->clip_rect;
 		dst.w=i*5;
-		SDL_FillRect(bar[i],NULL,bar_back_color);
+		SDL_FillRect(bar[i],nullptr,bar_back_color);
 		SDL_FillRect(bar[i],&dst,bar_front_color);
 	}
 }
@@ -95,17 +95,17 @@ void Display::Show(const Model &model,const bool *exit)
 		timer.Start();
 		++frame;
 		ShowTerrain(terrain,0);
-		for (list<Bullet>::const_iterator i=bullets.begin();i!=bullets.end();++i)
+		for (auto &b:bullets)
 		{
-			ApplySurface(bullet_clips[i->GetModel()],screen,i->GetX(),i->GetY());
+			ApplySurface(bullet_clips[b.GetModel()],screen,b.GetX(),b.GetY());
 		}
-		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
+		for (auto &t:tanks)
 		{
-			ApplySurface(tank_clips[i->GetModel()][i->GetDir()],screen,i->GetX(),i->GetY());
+			ApplySurface(tank_clips[t.GetModel()][t.GetDir()],screen,t.GetX(),t.GetY());
 		}
-		for (list<Tank>::const_iterator i=tanks.begin();i!=tanks.end();++i)
+		for (auto &t:tanks)
 		{
-			ApplySurface(bar[i->GetHp()],screen,i->GetX(),i->GetY()-8);
+			ApplySurface(bar[t.GetHp()],screen,t.GetX(),t.GetY()-8);
 		}
 		ShowTerrain(terrain,1);
 		//Update Screen
