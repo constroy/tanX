@@ -1,5 +1,5 @@
 # tanX
-A 2D tank game using SDL
+A 2D tank game written in c++11 using SDL
 
 ## Library
 + SDL 1.2.15
@@ -8,8 +8,8 @@ A 2D tank game using SDL
 
 ## To DO
 + complete the class tank
-+ complete the class bullet
 + complete the class terrain
++ add more kinds of terrain grids
 + make the images more pretty (wait for someone to do)
 + add some sound effects (wait for someone to do)
 
