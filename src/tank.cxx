@@ -23,11 +23,6 @@ void Tank::Damage(int damage)
 		die=die_time;
 	}
 }
-bool Tank::Dead()
-{
-	if (die && --die==0) return true;
-	return false;
-}
 void Tank::Execute(int cmd)
 {
 	if (die) return;
@@ -44,10 +39,4 @@ void Tank::Execute(int cmd)
 	{
 		if (!reload) reload=reload_time;
 	}
-
-}
-bool Tank::Reload()
-{
-	if (!die && reload) return reload--==reload_time;
-	return false;
 }
