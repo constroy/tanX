@@ -8,14 +8,12 @@ Terrain Code
 | 4 | 0000 | @ | mine	|
 | 6 | 0000 | ` | fire	|
 
-| 2 | 0010 | " | forest	|
-
 | 2 | 0100 | $ | water	|
 
 | 2 | 1110 | . | block	|
-| 3 | 1110 | > | iron	|
-| 4 | 1110 | N | stone	|
-| 5 | 1110 | ^ | wood	|
-| 6 | 1110 | n | TNT	|
+| 4 | 1110 | N | iron	|
+| 5 | 1110 | ^ | brick  |
+| 6 | 1110 | n | wood	|
+| 7 | 1110 | ~ | TNT	|
 
-| 2 | 1001 | ) | bush	|
+| 2 | 1001 | ) | forest	|
