@@ -24,7 +24,7 @@ bool Init()
 	//Set the window caption
 	SDL_WM_SetCaption("tanX",nullptr);
 	//Set the window icon
-	SDL_WM_SetIcon(SDL_LoadBMP("../img/icon.bmp"),nullptr);
+	SDL_WM_SetIcon(SDL_LoadBMP("img/icon.bmp"),nullptr);
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,1024)==-1) return false;
 	//Get an instance of terrain
@@ -36,7 +36,7 @@ bool Init()
 	//Load the map
 	terrain->LoadMap();
 	//Load the background music
-	bgm=Mix_LoadMUS("../snd/tank_draft_mix.mp3");
+	bgm=Mix_LoadMUS("snd/tank_draft_mix.mp3");
 	if (bgm==nullptr) return false;
 	return true;
 }

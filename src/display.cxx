@@ -39,17 +39,17 @@ void Display::Init()
 	char file_path[256];
 	for (int i=0;i<1;++i)
 	{
-		sprintf(file_path,"../img/bullet/%d.bmp",i);
+		sprintf(file_path,"img/bullet/%d.bmp",i);
 		bullet_clips[i]=LoadImage(file_path);
 	}
 	for (int i=0;i<5;++i) for (int j=0;j<5;++j)
 	{
-		sprintf(file_path,"../img/tank/%d-%d.bmp",i,j);
+		sprintf(file_path,"img/tank/%d-%d.bmp",i,j);
 		tank_clips[i][j]=LoadImage(file_path,true);
 	}
 	for (int i=0;i<128;++i)
 	{
-		sprintf(file_path,"../img/terrain/%x.bmp",i);
+		sprintf(file_path,"img/terrain/%x.bmp",i);
 		terrain_clips[i]=LoadImage(file_path,true);
 	}
 	for (int i=0;i<9;++i)
@@ -94,7 +94,8 @@ void Display::Show(const Model &model,const bool *exit)
 	{
 		timer.Start();
 		++frame;
-		ShowTerrain(terrain,0);
+		SDL_FillRect(screen,NULL,0U);
+		ShowTerrain(terrain,false);
 		for (auto &b:bullets)
 		{
 			ApplySurface(bullet_clips[b.GetModel()],screen,b.GetX(),b.GetY());
@@ -107,7 +108,7 @@ void Display::Show(const Model &model,const bool *exit)
 		{
 			ApplySurface(bar[t.GetHp()],screen,t.GetX(),t.GetY()-8);
 		}
-		ShowTerrain(terrain,1);
+		ShowTerrain(terrain,true);
 		//Update Screen
 		SDL_Flip(screen);
 		

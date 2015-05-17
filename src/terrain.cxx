@@ -7,7 +7,7 @@ Terrain *Terrain::GetInstance()
 }
 void Terrain::LoadMap()
 {
-	FILE *file=fopen("../map/demo.map","r");
+	FILE *file=fopen("map/demo.map","r");
 	for (int j=0;j<map_size;++j)
 	{
 		for (int i=0;i<map_size;++i) map[i][j]=getc(file);
