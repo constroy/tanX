@@ -114,7 +114,7 @@ int main(int argc,char *args[])
 			++j;
 			if (i->Dead()) tanks.erase(i);
 			i->Move(+1);
-			if (terrain->Check(*i)) i->Move(-1);
+			if (terrain->Hit(*i)) i->Move(-1);
 			else
 			{
 				for (auto k=tanks.begin();k!=tanks.end();++k)
@@ -131,7 +131,7 @@ int main(int argc,char *args[])
 		{
 			++j;
 			i->Move(+1);
-			if (terrain->Check(*i)) bullets.erase(i);
+			if (terrain->Hit(*i)) bullets.erase(i);
 			else
 			{
 				for (auto k=tanks.begin();k!=tanks.end();++k)

@@ -15,7 +15,7 @@ void Terrain::LoadMap()
 	}
 	fclose(file);
 }
-bool Terrain::Check(const Item &it)
+bool Terrain::Hit(const Item &it)
 {
 	int x0=it.GetX()/20;
 	int x1=(it.GetX()+it.GetW()-1)/20;
@@ -23,7 +23,14 @@ bool Terrain::Check(const Item &it)
 	int y1=(it.GetY()+it.GetH()-1)/20;
 	for (int i=x0;i<=x1;++i) for (int j=y0;j<=y1;++j)
 	{
-		if (map[i][j]&it.GetMask()) return true;
+		if (map[i][j]&it.GetMask())
+		{
+			if (it.GetMask()==BULLET)
+			{
+				if ((map[i][j]>>3)+it.GetPow()>=15) map[i][j]=0X20;
+			}
+			return true;
+		}
 	}
 	return false;
 }

@@ -13,7 +13,8 @@ class Terrain
 	public:
 		static Terrain *GetInstance();
 		void LoadMap();
-		bool Check(const Item &it);
+		bool Hit(const Item &it);
+		void Destroy(const Item &it);
 		char GetGrid(int x,int y) const;
 };
 
