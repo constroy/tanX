@@ -1,11 +1,10 @@
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_thread.h>
+#include "client.hxx"
 #include "config.hxx"
 #include "display.hxx"
 #include "model.hxx"
 #include "timer.hxx"
-
-#define DEMO
 
 Mix_Music *bgm=nullptr;
 
@@ -16,6 +15,9 @@ Model model;
 list<Tank> &tanks=model.tanks;
 list<Bullet> &bullets=model.bullets;
 Terrain *&terrain=model.terrain;
+Client *client;
+
+int myid,id,cmd,num;
 
 bool Init()
 {
@@ -55,6 +57,43 @@ int Show(void *exit)
 	display->Show(model,(bool*)exit);
 	return 0;
 }
+int Ctrl(void *exit)
+{
+	SDL_Event event;
+	while (!*(bool *)exit)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type==SDL_QUIT)
+			{
+				*(bool *)exit=true;
+			}
+			else if (event.type==SDL_KEYDOWN)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_UP:cmd=1;break;
+					case SDLK_DOWN:cmd=2;break;
+					case SDLK_LEFT:cmd=3;break;
+					case SDLK_RIGHT:cmd=4;break;
+					case SDLK_SPACE:cmd=0;break;
+				}
+				client->Send(myid,cmd);
+			}
+			else if (event.type==SDL_KEYUP)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_UP:cmd=-1;break;
+					case SDLK_DOWN:cmd=-2;break;
+					case SDLK_LEFT:cmd=-3;break;
+					case SDLK_RIGHT:cmd=-4;break;
+				}
+				client->Send(myid,cmd);
+			}
+		}
+	}
+}
 bool Check(const Item &a,const Item &b)
 {
 	if (a.GetX()>=b.GetX()+b.GetW()) return false;
@@ -63,49 +102,42 @@ bool Check(const Item &a,const Item &b)
 	if (a.GetY()+a.GetH()<=b.GetY()) return false;
 	return true;
 }
-int main(int argc,char *args[])
-{	
+int main(int argc,char *argv[])
+{
+	if (argc!=2)
+	{
+		puts("usage: tanX server_ip");
+		return -1;
+	}
+	puts("Connecting to server...");
+	client=new Client(argv[1]);
+	client->Connect(myid,num);
+	puts("Server connected!");
+	printf("myid: %d, num: %d", myid, num);
 	if (!Init()) return -1;
-
 	//Start drwing
 	bool exit=false;
-	SDL_Thread *draw=SDL_CreateThread(Show,&exit);
+	SDL_Thread *ctrl_t=SDL_CreateThread(Ctrl,&exit);
+	SDL_Thread *draw_t=SDL_CreateThread(Show,&exit);
 	//Play the BGM
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 
-#ifdef DEMO
-	for (int i=0;i<3;++i) for (int j=0;j<3;++j) tanks.push_back(Tank(rand()%5,i*8+4,j*8+12));
+	for (int i=1;i<=num;++i)
+		tanks.push_back(Tank(i,i-1,i*8+4,24));
 	list<Tank>::iterator tank=tanks.begin();
-#endif
 
-	Timer timer;	
-	LOOP:
+	Timer timer;
+	while(!exit)
 	{
 		timer.Start();
-		
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
+		while (client->Receive(id,cmd))
 		{
-			if (event.type==SDL_QUIT) goto END;
-			else if (event.type==SDL_KEYDOWN)
+			for (auto &t:tanks)
 			{
-				switch (event.key.keysym.sym)
+				if (t.GetId()==id)
 				{
-					case SDLK_UP:tank->Execute(1);break;
-					case SDLK_DOWN:tank->Execute(2);break;
-					case SDLK_LEFT:tank->Execute(3);break;
-					case SDLK_RIGHT:tank->Execute(4);break;
-					case SDLK_SPACE:tank->Execute(0);break;
-				}
-			}
-			else if (event.type==SDL_KEYUP)
-			{
-				switch (event.key.keysym.sym)
-				{
-					case SDLK_UP:tank->Execute(-1);break;
-					case SDLK_DOWN:tank->Execute(-2);break;
-					case SDLK_LEFT:tank->Execute(-3);break;
-					case SDLK_RIGHT:tank->Execute(-4);break;
+					t.Execute(cmd);
+					break;
 				}
 			}
 		}
@@ -114,7 +146,10 @@ int main(int argc,char *args[])
 			++j;
 			if (i->Dead()) tanks.erase(i);
 			i->Move(+1);
-			if (terrain->Hit(*i)) i->Move(-1);
+			if (terrain->Hit(*i))
+			{
+				i->Move(-1);
+			}
 			else
 			{
 				for (auto k=tanks.begin();k!=tanks.end();++k)
@@ -122,6 +157,7 @@ int main(int argc,char *args[])
 					if (i!=k && Check(*i,*k)) i->Move(-1);
 				}
 			}
+
 			if (i->Reload())
 			{
 				bullets.push_back(Bullet(0,i->GetX()+18,i->GetY()+18,i->GetDir(),i->GetPow()));
@@ -146,11 +182,10 @@ int main(int argc,char *args[])
 		}
 		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
-	goto LOOP;
-	END:
 	Mix_HaltMusic();
 	exit=true;
-	SDL_WaitThread(draw,nullptr);
+	SDL_WaitThread(ctrl_t,nullptr);
+	SDL_WaitThread(draw_t,nullptr);
 	CleanUp();
 	return 0;
 }
