@@ -6,15 +6,17 @@
 class Tank:public Item
 {
 	private:
+		int id;
 		int hp;
 		int reload;
 		int die;
 	public:
-		Tank(int img,int x,int y);
+		Tank(int id,int img,int x,int y);
 		void Damage(int damage);
 		bool Dead();
 		void Execute(int cmd);
 		int GetHp() const;
+		int GetId() const;
 		bool Reload();
 };
 inline bool Tank::Dead()
@@ -24,6 +26,10 @@ inline bool Tank::Dead()
 inline int Tank::GetHp() const
 {
 	return hp;
+}
+inline int Tank::GetId() const
+{
+	return id;
 }
 inline bool Tank::Reload()
 {

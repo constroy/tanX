@@ -1,18 +1,8 @@
 #include "tank.hxx"
 
-Tank::Tank(int m,int _x,int _y)
-{
-	model=m;
-	x=_x*20,y=_y*20,w=40,h=40;
-	vel=4;
-	dir=1;
-	hp=8;
-	pow=2;
-	reload=0;
-	die=0;
-	run=false;
-	mask=TANK;
-}
+Tank::Tank(int id,int m,int x,int y):
+		Item(m,20*x,20*y,40,40,4,1,2,false,TANK),id(id),hp(8),reload(0),die(0) {}
+
 void Tank::Damage(int damage)
 {
 	if ((hp-=damage)<=0)

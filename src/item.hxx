@@ -13,6 +13,7 @@ class Item
 		bool run;
 		ItemMask mask;
 	public:
+		Item(int m,int x,int y,int w,int h,int v,int d,int p,bool run,ItemMask mask);
 		void Move(int opt);
 		int GetModel() const;
 		int GetX() const;
@@ -21,7 +22,7 @@ class Item
 		int GetH() const;
 		int GetDir() const;
 		int GetPow() const;
-		int GetMask() const;
+		ItemMask GetMask() const;
 };
 
 inline int Item::GetModel() const
@@ -52,7 +53,7 @@ inline int Item::GetPow() const
 {
 	return pow;
 }
-inline int Item::GetMask() const
+inline ItemMask Item::GetMask() const
 {
 	return mask;
 }

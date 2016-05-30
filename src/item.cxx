@@ -1,5 +1,8 @@
 #include "item.hxx"
 
+Item::Item(int m,int x,int y,int w,int h,int v,int d,int p,bool run,ItemMask mask):
+		model(m),x(x),y(y),w(w),h(h),vel(v),dir(d),pow(p),run(run),mask(mask) {}
+
 void Item::Move(int opt)
 {
 	if (run)
