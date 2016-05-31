@@ -8,7 +8,7 @@ A 2D tank game written in c++14 using SDL
 
 ## To Do
 + complete the server features
-+ add game props such as weapons ans vehicles
++ add game props such as weapons and vehicles
 + display game status in the sidebar
 + add more kinds of terrain grids
 + add some sound effects (wait for someone to do)
@@ -29,5 +29,5 @@ start the client
 
 use arrow keys to move, spacebar to shoot
 
-##Screenshoot
-![Screenshoot](screenshot.png)
+##Screenshot
+![screenshot](screenshot.png)
