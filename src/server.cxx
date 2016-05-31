@@ -3,6 +3,10 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <map>
+#include <SDL/SDL.h>
+#include "timer.hxx"
+
+const int time_slot=40;
 
 using std::map;
 using std::pair;
@@ -65,14 +69,18 @@ int main(int argc,char *argv[])
 		buf[1]=clts.size();
 		sendto(sock,buf,sizeof buf,0,(sockaddr *)&i.second,len);
 	}
+
+	Timer timer;
 	for (;;)
 	{
+		timer.Start();
 		int t=recvfrom(sock,buf,sizeof buf,MSG_DONTWAIT,(sockaddr *)(sockaddr *)&si_oth,&len);
 		if (t==sizeof buf)
 		{
 			for (const auto &i:clts)
 				sendto(sock,buf,sizeof buf,0,(sockaddr *)&i.second,len);
 		}
+		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
 	return 0;
 }
