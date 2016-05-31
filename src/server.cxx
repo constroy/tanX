@@ -23,7 +23,7 @@ map<Addr,sockaddr_in> clts;
 
 void fail(const char s[])
 {
-    perror(s);
+    puts(s);
     exit(-1);
 }
 int main(int argc,char *argv[])
