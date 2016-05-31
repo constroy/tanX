@@ -3,23 +3,15 @@
 #include <cstring>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-#include <map>
-#include "timer.hxx"
 
-const int time_slot=40;
+#define MAX_NUM_CLTS 8
 
-using std::map;
-using std::pair;
-using std::make_pair;
-
-typedef pair<unsigned,int> Addr;
-
-int id,num;
+int num;
 int sock;
 int buf[2];
 sockaddr_in si_srv,si_oth;
-unsigned len=sizeof si_oth;
-map<Addr,sockaddr_in> clts;
+unsigned buf_size=sizeof buf,len=sizeof si_oth;
+sockaddr_in clts[MAX_NUM_CLTS];
 
 void fail(const char s[])
 {
@@ -48,39 +40,34 @@ int main(int argc,char *argv[])
 	}
 
 	puts("Waiting for clients...");
-	while ((int)clts.size()<num)
+	for (int i=0;i<num;++i)
 	{
-		if (recvfrom(sock,buf,sizeof buf,0,(sockaddr *)&si_oth,&len)==-1)
+		if (recvfrom(sock,buf,buf_size,0,(sockaddr *)&si_oth,&len)==-1)
         {
             fail("recvfrom");
         }
         if (buf[0]==0)
         {
-			Addr addr=make_pair(inet_addr(inet_ntoa(si_oth.sin_addr)),si_oth.sin_port);
-			clts[addr]=si_oth;
-			printf("Clients connected %lu/%d\n",clts.size(),num);
+			clts[i]=si_oth;
+			printf("Clients connected %d/%d\n",i,num);
 		}
 	}
 	puts("Starting the game...");
 
-	for (const auto &i:clts)
+	for (int i=0;i<num;++i)
 	{
-		buf[0]=++id;
-		buf[1]=clts.size();
-		sendto(sock,buf,sizeof buf,0,(sockaddr *)&i.second,len);
+		buf[0]=i+1;
+		buf[1]=num;
+		sendto(sock,buf,buf_size,0,(sockaddr *)(clts+i),len);
 	}
 
-	Timer timer;
 	for (;;)
 	{
-		timer.Start();
-		int t=recvfrom(sock,buf,sizeof buf,MSG_DONTWAIT,(sockaddr *)(sockaddr *)&si_oth,&len);
-		if (t==sizeof buf)
+		if (recvfrom(sock,buf,buf_size,0,(sockaddr *)&si_oth,&len)==buf_size)
 		{
-			for (const auto &i:clts)
-				sendto(sock,buf,sizeof buf,0,(sockaddr *)&i.second,len);
+			for (int i=0;i<num;++i)
+				sendto(sock,buf,buf_size,0,(sockaddr *)(clts+i),len);
 		}
-		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
 	return 0;
 }
