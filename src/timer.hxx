@@ -1,6 +1,8 @@
 #ifndef _TIMER_HXX
 #define _TIMER_HXX
 
+#include <SDL/SDL.h>
+
 class Timer
 {
 	private:
