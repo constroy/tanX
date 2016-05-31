@@ -1,16 +1,22 @@
 CXX=g++
-CXXFLAGS=-O2
+CXXFLAGS=-std=c++14 -O2
 LIBS=-lSDL -lSDL_ttf -lSDL_mixer
 SRC=$(wildcard *.cxx)
 HEAD=$(wildcard *.hxx)
-OBJ=$(SRC:.cxx=.o)
-EXEC=tanX
+OBJ=$(filter-out server.o, $(SRC:.cxx=.o))
 
-$(EXEC): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(LIBS) -o $(EXEC) $(OBJ)
+all: tanX lnX
 
-$(OBJ): $(HEAD) $(SRC)
+tanX: $(OBJ)
+	$(CXX) $(CXXFLAGS) $(LIBS) -o $@ $(OBJ)
+
+lnX: timer.o server.o
+	$(CXX) $(CXXFLAGS) -lSDL -o $@ $^
+
+$(OBJ): $(HEAD)
 	$(CXX) -c $(CXXFLAGS) $(SRC)
 
 clean:
-	rm -f *.o *.gch $(EXEC)
+	rm -f *.o *.gch tanX lnX
+
+.PHONY: clean
