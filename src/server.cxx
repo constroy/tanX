@@ -1,9 +1,9 @@
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <map>
-#include <SDL/SDL.h>
 #include "timer.hxx"
 
 const int time_slot=40;
