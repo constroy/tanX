@@ -59,9 +59,11 @@ int Show(void *exit)
 }
 int Ctrl(void *exit)
 {
+	Timer timer;
 	SDL_Event event;
 	while (!*(bool *)exit)
 	{
+		timer.Start();
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type==SDL_QUIT)
@@ -92,6 +94,7 @@ int Ctrl(void *exit)
 				client->Send(myid,cmd);
 			}
 		}
+		if (timer.GetTicks()<time_slot) SDL_Delay(time_slot-timer.GetTicks());
 	}
 }
 bool Check(const Item &a,const Item &b)
@@ -123,7 +126,7 @@ int main(int argc,char *argv[])
 	if (!Mix_PlayingMusic()) if (Mix_PlayMusic(bgm,-1)==-1) return -1;
 
 	for (int i=1;i<=num;++i)
-		tanks.push_back(Tank(i,i-1,i*8+4,24));
+		tanks.push_back(Tank(i,i-1,i*4,24));
 	list<Tank>::iterator tank=tanks.begin();
 
 	Timer timer;
