@@ -21,7 +21,7 @@ build this project to get server and client
 
 start the server (only one player needs to do this)
 
-`./lnx number_of_players`
+`./lnX number_of_players`
 
 start the client
 
