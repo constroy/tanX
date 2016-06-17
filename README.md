@@ -1,5 +1,5 @@
 # tanX
-A 2D tank game written in c++14 using SDL
+A multiplayer online tank game written using SDL and UDP
 
 ## Library
 + SDL 1.2
