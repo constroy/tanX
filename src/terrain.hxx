@@ -2,6 +2,7 @@
 #define _TERRAIN_HXX
 
 #include <cstdio>
+
 #include "config.hxx"
 #include "item.hxx"
 

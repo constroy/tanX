@@ -1,8 +1,9 @@
+#include <arpa/inet.h>
+#include <sys/socket.h>
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <arpa/inet.h>
-#include <sys/socket.h>
 
 #define MAX_NUM_CLTS 8
 

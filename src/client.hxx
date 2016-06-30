@@ -1,9 +1,7 @@
 #ifndef _CLIENT_HXX
 #define _CLIENT_HXX
 
-#include <cstring>
 #include <arpa/inet.h>
-#include <sys/socket.h>
 
 class Client
 {

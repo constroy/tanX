@@ -2,6 +2,7 @@
 #define _MODEL_HXX
 
 #include <list>
+
 #include "bullet.hxx"
 #include "tank.hxx"
 #include "terrain.hxx"

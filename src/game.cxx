@@ -1,5 +1,6 @@
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_thread.h>
+
 #include "client.hxx"
 #include "config.hxx"
 #include "display.hxx"

@@ -1,5 +1,10 @@
 #include "display.hxx"
 
+#include <cstdio>
+
+#include "config.hxx"
+#include "timer.hxx"
+
 inline void ApplySurface(SDL_Surface *src,SDL_Surface *dst,short x,short y)
 {
 	SDL_Rect offset={x,y};
@@ -33,7 +38,7 @@ void Display::Init()
 	//TTF_Init();
 	//Open the font
 	//font=TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf",24);
-	
+
 	screen=SDL_SetVideoMode(screen_width,screen_height,screen_bpp,
 							SDL_HWSURFACE|SDL_ASYNCBLIT|SDL_DOUBLEBUF);
 	char file_path[256];
@@ -111,7 +116,7 @@ void Display::Show(const Model &model,const bool *exit)
 		ShowTerrain(terrain,true);
 		//Update Screen
 		SDL_Flip(screen);
-		
+
 		if (timer.GetTicks()*screen_fps<1000)
 		{
 			SDL_Delay(1000/screen_fps-timer.GetTicks()+(frame&1));
@@ -121,6 +126,6 @@ void Display::Show(const Model &model,const bool *exit)
 			printf("fps:%.3f\n",frame*1000.0f/fps.GetTicks());
 			frame=0;
 			fps.Start();
-		}	
+		}
 	}
 }

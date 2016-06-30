@@ -1,6 +1,10 @@
 #include "client.hxx"
 
+#include <sys/socket.h>
+
 #include <cstdio>
+#include <cstring>
+
 
 Client::Client(const char ip[])
 {

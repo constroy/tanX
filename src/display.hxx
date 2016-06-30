@@ -1,12 +1,10 @@
 #ifndef _DISPLAY_HXX
 #define _DISPLAY_HXX
 
-#include <cstdio>
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
-#include "config.hxx"
+
 #include "model.hxx"
-#include "timer.hxx"
+#include "terrain.hxx"
 
 class Display
 {
