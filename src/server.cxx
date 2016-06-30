@@ -19,6 +19,10 @@ void fail(const char s[])
     puts(s);
     exit(-1);
 }
+bool operator !=(const sockaddr_in &a, const sockaddr_in &b)
+{
+	return a.sin_addr.s_addr!=b.sin_addr.s_addr || a.sin_port!=b.sin_port;
+}
 int main(int argc,char *argv[])
 {
 	if (argc!=2)
@@ -66,6 +70,13 @@ int main(int argc,char *argv[])
 	{
 		if (recvfrom(sock,buf,buf_size,0,(sockaddr *)&si_oth,&len)==buf_size)
 		{
+			if (si_oth!=clts[buf[0]-1])
+			{
+				printf("Warning: %s:%hu intends to control player %d!\n",
+						inet_ntoa(si_oth.sin_addr),ntohs(si_oth.sin_port),
+						buf[0]);
+				continue;
+			}
 			for (int i=0;i<num;++i)
 				sendto(sock,buf,buf_size,0,(sockaddr *)(clts+i),len);
 		}
