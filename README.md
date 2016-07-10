@@ -1,13 +1,12 @@
 # tanX
-A multiplayer online tank game written using SDL and UDP
+A multiplayer online tank game using SDL and UDP
 
 ## Library
 + SDL 1.2
-+ SDL_ttf 2.0
 + SDL_mixer 1.2
 
 ## To Do
-+ complete the server features
++ complete the server features (reliable transmission)
 + add game props such as weapons and vehicles
 + display game status in the sidebar
 + add more kinds of terrain grids
@@ -17,17 +16,24 @@ A multiplayer online tank game written using SDL and UDP
 1. AI interface
 
 ## How to Play
-build this project to get server and client
+Build this project to get server and client.
 
-start the server (only one player needs to do this)
+```
+$ cd src/
+$ make
+```
 
-`./lnX number_of_players`
+Start the server (only one player needs to do this).
 
-start the client
+`$ ./lnX number_of_players`
 
-`./tanX server_ip`
+Start the client.
 
-use arrow keys to move, spacebar to shoot
+`$ ./tanX server_ip`
+
+Use arrow keys to move, spacebar to shoot.
+
+You can edit the map in map/demo.map.
 
 ##Screenshot
 ![screenshot](screenshot.png)
