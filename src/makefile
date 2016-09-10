@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-std=c++14 -O2
-LIBS=-lSDL -lSDL_ttf -lSDL_mixer
+LIBS=-lSDL -lSDL_mixer
 SRC=$(filter-out server.cxx,$(wildcard *.cxx))
 HEAD=$(wildcard *.hxx)
 OBJ=$(SRC:.cxx=.o)
