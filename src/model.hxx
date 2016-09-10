@@ -9,8 +9,7 @@
 
 using std::list;
 
-struct Model
-{
+struct Model {
 	list<Tank> tanks;
 	list<Bullet> bullets;
 	Terrain *terrain;

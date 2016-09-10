@@ -3,38 +3,29 @@
 
 #include "item.hxx"
 
-class Tank:public Item
-{
-	private:
-		int id;
-		int hp;
-		int reload;
-		int die;
-	public:
-		Tank(int id,int img,int x,int y);
-		void Damage(int damage);
-		bool Dead();
-		void Execute(int cmd);
-		int GetHp() const;
-		int GetId() const;
-		bool Reload();
+class Tank: public Item {
+public:
+	Tank(int id, int img, int x, int y);
+	void Damage(int damage);
+	bool Dead() {
+		return die && --die == 0;
+	}
+	void Execute(int cmd);
+	int GetHp() const {
+		return hp;
+	}
+	int GetId() const {
+		return id;
+	}
+	bool Reload() {
+		if (!die && reload) return reload-- == reload_time;
+		else return false;
+	}
+private:
+	int id;
+	int hp;
+	int reload;
+	int die;
 };
-inline bool Tank::Dead()
-{
-	return die && --die==0;
-}
-inline int Tank::GetHp() const
-{
-	return hp;
-}
-inline int Tank::GetId() const
-{
-	return id;
-}
-inline bool Tank::Reload()
-{
-	if (!die && reload) return reload--==reload_time;
-	else return false;
-}
 
 #endif
