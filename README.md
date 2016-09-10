@@ -6,7 +6,7 @@ A multiplayer online tank game using SDL and UDP
 + SDL_mixer 1.2
 
 ## To Do
-+ complete the server features (reliable transmission)
++ make multi-thread access more safe
 + add game props such as weapons and vehicles
 + display game status in the sidebar
 + add more kinds of terrain grids
@@ -14,6 +14,7 @@ A multiplayer online tank game using SDL and UDP
 
 ## Futue Plan
 1. AI interface
+2. Reliable transmission
 
 ## How to Play
 Build this project to get server and client.
