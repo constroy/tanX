@@ -48,4 +48,6 @@ protected:
 	ItemMask mask;
 };
 
+bool Check(const Item &a, const Item &b);
+
 #endif
