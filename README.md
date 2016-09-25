@@ -2,11 +2,11 @@
 A multiplayer online tank game using SDL and UDP
 
 ## Library
++ Pthread (for c++14 multithread)
 + SDL 1.2
 + SDL_mixer 1.2
 
-## To Do
-+ make multi-thread access more safe
+## ToDo
 + add game props such as weapons and vehicles
 + display game status in the sidebar
 + add more kinds of terrain grids
