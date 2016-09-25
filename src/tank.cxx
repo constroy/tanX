@@ -5,6 +5,7 @@ Tank::Tank(int id, int m, int x, int y):
 	die(0) {}
 
 void Tank::Damage(int damage) {
+	if (die) return;
 	if ((hp -= damage) <= 0) {
 		hp = 0;
 		dir = 0;
