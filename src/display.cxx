@@ -3,7 +3,8 @@
 #include <cstdio>
 
 #include "config.hxx"
-#include "timer.hxx"
+
+using std::list;
 
 inline void ApplySurface(SDL_Surface *src, SDL_Surface *dst, short x, short y) {
 	SDL_Rect offset = {x, y};
@@ -65,48 +66,28 @@ void Display::Quit() {
 	for (int i = 0; i < 128; ++i) SDL_FreeSurface(terrain_clips[i]);
 	for (int i = 0; i < 9; ++i) SDL_FreeSurface(bar[i]);
 }
-// opt 0:lower grid 1:upper grid
-void Display::ShowTerrain(Terrain *terrain, bool opt) {
+// opt false: lower grid; true: upper grid
+void Display::ShowTerrain(const Terrain &terrain, bool opt) {
 	for (int i = 0; i < map_size; ++i)
 		for (int j = 0; j < map_size; ++j) {
-			int grid = terrain->GetGrid(i, j);
+			int grid = terrain.GetGrid(i, j);
 			if ((grid & 1) == opt) ApplySurface(terrain_clips[grid], screen,
 												i * 20, j * 20);
 		}
 }
-void Display::Show(const Model &model, const bool *exit) {
-	const list<Tank> &tanks = model.tanks;
-	const list<Bullet> &bullets = model.bullets;
-	Terrain *const &terrain = model.terrain;
-	Timer timer;
-	Timer fps;
-	int frame = 0;
-	fps.Start();
-	while (!*exit) {
-		timer.Start();
-		++frame;
-		SDL_FillRect(screen, NULL, 0U);
-		ShowTerrain(terrain, false);
-		for (auto &b : bullets) {
-			ApplySurface(bullet_clips[b.GetModel()], screen, b.GetX(), b.GetY());
-		}
-		for (auto &t : tanks) {
-			ApplySurface(tank_clips[t.GetModel()][t.GetDir()], screen, t.GetX(), t.GetY());
-		}
-		for (auto &t : tanks) {
-			ApplySurface(bar[t.GetHp()], screen, t.GetX(), t.GetY() - 8);
-		}
-		ShowTerrain(terrain, true);
-		// Update Screen
-		SDL_Flip(screen);
-
-		if (timer.GetTicks()*screen_fps < 1000) {
-			SDL_Delay(1000 / screen_fps - timer.GetTicks() + (frame & 1));
-		}
-		if (fps.GetTicks() >= 1000) {
-			printf("fps:%.3f\n", frame * 1000.0f / fps.GetTicks());
-			frame = 0;
-			fps.Start();
-		}
-	}
+void Display::Show(const list<Tank> &tanks, const list<Bullet> &bullets,
+				   const Terrain &terrain, std::mutex &item_mutex) {
+	SDL_FillRect(screen, 0, 0U);
+	ShowTerrain(terrain, false);
+	item_mutex.lock();
+	for (auto &b : bullets)
+		ApplySurface(bullet_clips[b.GetModel()], screen, b.GetX(), b.GetY());
+	for (auto &t : tanks)
+		ApplySurface(tank_clips[t.GetModel()][t.GetDir()], screen, t.GetX(), t.GetY());
+	for (auto &t : tanks)
+		ApplySurface(bar[t.GetHp()], screen, t.GetX(), t.GetY() - 8);
+	item_mutex.unlock();
+	ShowTerrain(terrain, true);
+	// Update Screen
+	SDL_Flip(screen);
 }
