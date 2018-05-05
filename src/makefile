@@ -10,10 +10,10 @@ OBJ=$(SRC:.cxx=.o)
 all: tanX lnX
 
 tanX: $(OBJ)
-	$(CXX) $(CXXFLAGS) $(LIBS) -o $@ $(OBJ)
+	$(CXX) $(CXXFLAGS) $(OBJ) $(LIBS) -o $@
 
 lnX: server.cxx
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(OBJ): $(HEAD)
 	$(CXX) -c $(CXXFLAGS) $(SRC)
