@@ -1,6 +1,11 @@
 # tanX
 A multiplayer online tank game using SDL and UDP
 
+## Current Status
++ Playable prototype with a UDP server/client implementation and basic tank movement/shooting.
++ Core gameplay assets (map, tank sprites, bullet sprites, terrain) are included in this repository.
++ Several planned features are still open (see `ToDo` and `Futue Plan` sections below).
+
 ## Library
 + Pthread (for c++14 multithread)
 + SDL 1.2
